@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Activity, AppWindow, Bell, Box, CheckCircle2, ChevronRight, CircleHelp, ExternalLink, FolderOpen, Home, Layers3, List, Menu, Play, RefreshCw, Search, Server, ShieldCheck, Square, X } from 'lucide-react';
 import { AzureLogo, Badge, Breadcrumb } from '../../components/Shared';
 import { useLearning } from '../context';
@@ -12,6 +12,8 @@ export function AzureWorkspace() {
   const [menu, setMenu] = useState(() => window.innerWidth > 800);
   const [query, setQuery] = useState('');
   const [notifications, setNotifications] = useState(false);
+  const content = useRef<HTMLElement>(null);
+  useEffect(() => { if (content.current) content.current.scrollTop = 0; }, [state.ui.page, state.ui.selectedId, scope]);
   const navigate = (page: PortalPage, selectedId = '') => {
     dispatch({ type: 'UI', patch: { page, selectedId, surface: 'azure' } });
     if (window.innerWidth <= 800) setMenu(false);
@@ -35,7 +37,7 @@ export function AzureWorkspace() {
       <div className="azure-header-actions"><button className="icon-button" aria-label="Notifications Azure" aria-expanded={notifications} onClick={() => setNotifications(!notifications)}><Bell size={20} /></button><button className="icon-button azure-help" aria-label="Aide sur les ressources Azure" onClick={() => dispatch({ type: 'REVIEW_EXPLANATION' })}><CircleHelp size={20} /></button><span className="azure-user"><span>{scope === 'demo' ? 'Nora' : 'Romain'}<small>Atelier IT</small></span><b>{scope === 'demo' ? 'N' : 'R'}</b></span></div>
     </header>
     <div className="azure-body"><nav className={'azure-nav ' + (menu ? 'azure-nav-expanded' : 'azure-nav-collapsed')} aria-label="Navigation Azure"><div className="azure-nav-label">FAVORIS</div>{nav.map(({ page, label, icon: Icon }) => <button key={page} title={label} aria-label={label} className={state.ui.page === page || page === 'apps' && state.ui.page === 'app' ? 'active' : ''} onClick={() => navigate(page)}><Icon size={19} /><span>{label}</span></button>)}<div className="azure-nav-foot"><ShieldCheck size={14} /><span>Annuaire : Atelier IT</span></div></nav>
-      <main className="azure-content" onFocusCapture={event => {
+      <main ref={content} className="azure-content" onFocusCapture={event => {
         const field = event.target as HTMLElement; const panel = document.querySelector('.mission-panel');
         if (!panel || !field.matches('button,input,select,textarea')) return;
         const a = field.getBoundingClientRect(); const b = panel.getBoundingClientRect();
