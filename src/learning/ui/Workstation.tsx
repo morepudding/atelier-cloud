@@ -1,0 +1,31 @@
+import { useState } from 'react';
+import { ArrowLeft, ExternalLink, Globe, LockKeyhole, Maximize2, Minus, Monitor, NotebookPen, RefreshCw, X } from 'lucide-react';
+import { AzureLogo } from '../../components/Shared';
+import { useLearning } from '../context';
+
+export function Workstation() {
+  const { state, dispatch } = useLearning();
+  const apps = [{ key: 'azure' as const, label: 'Microsoft Azure', icon: AzureLogo }, { key: 'client' as const, label: 'Navigateur', icon: Globe }, { key: 'notes' as const, label: 'Carnet', icon: NotebookPen }];
+  const open = (surface: 'azure' | 'client' | 'notes') => {
+    if (surface === 'client' && !state.response) dispatch({ type: 'BROWSE', scope: 'lab', appId: 'app-a', now: Date.now() });
+    else dispatch({ type: 'UI', patch: { surface } });
+  };
+  const current = apps.find(app => app.key === state.ui.surface);
+  return <section className={'desktop native-desktop ' + (state.ui.maximized ? 'desktop-maximized' : '')} aria-label="Moniteur du poste de travail"><div className="wallpaper-art" aria-hidden="true"><span /><span /><span /><div className="wallpaper-grid" /></div><div className="desktop-shortcuts">{apps.map(({ key, label, icon: Icon }) => <button key={key} aria-label={label + ' sur le bureau'} onClick={() => open(key)}><span className={'shortcut-icon app-icon-' + (key === 'client' ? 'azure' : key)}><Icon size={31} /></span><span>{label}</span></button>)}</div>
+    {current && <div className="app-window"><div className="window-chrome"><div className="window-title"><current.icon size={16} />{current.label}</div><div className="window-controls"><button aria-label="Réduire la fenêtre" onClick={() => dispatch({ type: 'UI', patch: { surface: 'desktop' } })}><Minus size={16} /></button><button aria-label={state.ui.maximized ? 'Restaurer la fenêtre' : 'Agrandir la fenêtre'} onClick={() => dispatch({ type: 'UI', patch: { maximized: !state.ui.maximized } })}><Maximize2 size={14} /></button><button aria-label="Fermer la fenêtre" onClick={() => dispatch({ type: 'UI', patch: { surface: 'desktop' } })}><X size={17} /></button></div></div><div className="window-content">{state.ui.surface === 'client' ? <Client key={state.ui.scope + ':' + state.response?.address} /> : <div className="learning-notebook"><h2>Mon carnet</h2><label htmlFor="learning-notes">Mes observations et mes explications</label><textarea id="learning-notes" value={state.notes} maxLength={15000} onChange={event => dispatch({ type: 'NOTES', text: event.target.value })} placeholder="Ce que j’ai observé, ce qui m’a surpris, ce que je veux retenir…" /><p>Ces notes ne sont pas notées automatiquement.</p></div>}</div></div>}
+    <footer className="desktop-taskbar"><div className="taskbar-apps"><button className="launcher-button" aria-label="Afficher le bureau" onClick={() => dispatch({ type: 'UI', patch: { surface: 'desktop' } })}><span /><span /><span /><span /></button><span className="taskbar-divider" />{apps.map(({ key, label, icon: Icon }) => <button key={key} className={'taskbar-app ' + (key === state.ui.surface ? 'taskbar-active' : '')} aria-label={'Ouvrir ' + label} onClick={() => open(key)}><Icon size={24} /></button>)}</div><div className="taskbar-system"><Monitor size={16} /><span>Atelier IT</span></div></footer>
+  </section>;
+}
+function Client() {
+  const { state, dispatch } = useLearning();
+  const response = state.response;
+  const [address, setAddress] = useState(response?.address ?? '');
+  const world = state.ui.scope === 'lab' ? state.world : state.demo;
+  const app = world.apps.find(value => value.id === response?.appId);
+  const refresh = () => response?.appId ? dispatch({ type: 'BROWSE', scope: state.ui.scope, appId: response.appId, now: Date.now() }) : dispatch({ type: 'ADDRESS', address, now: Date.now() });
+  return <div className="learning-client"><div className="learning-browser-tabs"><Globe size={14} /><span>{app?.application ?? 'Navigateur'}</span><X size={12} /></div><form className="learning-address" onSubmit={event => { event.preventDefault(); dispatch({ type: 'ADDRESS', address, now: Date.now() }); }}><button type="button" className="icon-button" aria-label="Revenir au portail Azure" onClick={() => dispatch({ type: 'UI', patch: { surface: 'azure' } })}><ArrowLeft size={17} /></button><button type="button" className="icon-button" aria-label="Actualiser la page" onClick={refresh}><RefreshCw size={17} /></button><LockKeyhole size={13} /><input key={response?.address} aria-label="Adresse du navigateur" defaultValue={response?.address} onChange={event => setAddress(event.target.value)} /><button type="submit" className="icon-button" aria-label="Ouvrir l’adresse"><ExternalLink size={15} /></button></form>
+    <main className="learning-client-page" aria-label="Page de l’application">
+      {response?.code === 200 ? <><header className="sample-app-header"><span className="sample-app-symbol">{app?.application[0]}</span><div><h2>{app?.application}</h2><p>Espace de l’équipe · DEV</p></div><span className="sample-version">Version {response.version}</span></header><div className="sample-app-body"><p className="sample-overline">VOTRE ESPACE DE TRAVAIL</p><h3>{app?.id === 'app-a' ? 'Les demandes de l’équipe' : 'Bienvenue dans votre application'}</h3><p>L’application répond et affiche le code de la version {response.version}.</p><div className="sample-app-cards">{['À traiter', 'En cours', 'Terminées'].map((label, index) => <article key={label}><span>{label}</span><strong>{[4, 7, 12][index]}</strong></article>)}</div><div className="sample-app-row"><span>Dernière activité</span><strong>{app?.application} est accessible</strong></div></div></> : <div className="learning-client-error"><Globe size={36} /><h2>{response?.code === 403 ? 'Error 403 — This web app is stopped' : response?.code === 503 ? 'Application en cours de transition' : 'Cette adresse est introuvable'}</h2><p>{response?.code === 403 ? 'Le service qui héberge cette application est arrêté.' : response?.code === 503 ? 'Une opération est en cours. Une nouvelle requête permettra de vérifier son résultat.' : 'Vérifie l’adresse du site que tu souhaites ouvrir.'}</p><button className="button button-outline" onClick={refresh}><RefreshCw size={15} />Actualiser la page</button></div>}
+    </main>
+  </div>;
+}

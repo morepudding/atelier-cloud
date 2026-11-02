@@ -2,6 +2,30 @@
 
 Vérifications du 2 novembre 2026.
 
+## Mini-parcours V2 — Application indisponible
+
+`npm run build` passe : TypeScript, 79 tests dans six fichiers, puis compilation Vite. Les 56 tests V1 restent verts ; la V2 ajoute 18 tests du monde, du contrôleur et de la sauvegarde, et cinq parcours d’interface.
+
+Les nouveaux contrôles vérifient :
+
+- L’arrêt, le démarrage, le délai, l’idempotence et la reprise d’une opération après rechargement ; la version du code reste identique.
+- La réponse du client après une nouvelle requête ; une page chargée ne change pas sans actualisation.
+- L’isolation de la démonstration, sans attribution de preuves à l’apprenant.
+- La nécessité d’observer l’indisponibilité, l’état Arrêtée, un démarrage et une nouvelle réponse de la bonne application, puis de choisir l’explication cohérente. Plusieurs routes et les deux ordres d’observation du symptôme et de la ressource sont acceptés.
+- La correction des prédictions et explications erronées, les indices progressifs, leur conservation et le classement accompagné des essais aidés.
+- Un nouvel essai sans recyclage des observations du cas précédent ; le rejeu conserve le carnet et les preuves terminées.
+- La séparation des sauvegardes, le passage entre V1 et V2, la reprise de l’encadré réduit et la récupération d’une sauvegarde V2 incohérente.
+
+Le parcours complet a aussi été joué dans un navigateur réel : explication et schéma, démonstration avec réponses 200 → 403 → 200, correction d’une prédiction, expérience sur DemandesEtude, explication, puis recherche native de SuiviInterventions, inspection du service et du dernier déploiement, démarrage et réponse en version 2.1.0. Le bilan affiche DemandesEtude avec aide et SuiviInterventions en autonomie sur ce cas. Le retour au cours après rechargement conserve les résultats. Un problème de contexte React lors du rechargement à chaud en développement a été corrigé en séparant le contexte de son fournisseur ; la reprise complète fonctionne ensuite.
+
+À 390 × 844 pixels, le moniteur et le portail restent dans la largeur de l’écran, avec un seul encadré. Le contenu de Nora défile ; sa réduction rend la surface de travail accessible et reste conservée après rechargement. Les dimensions normales du navigateur sont rétablies après le contrôle.
+
+Ces vérifications portent sur le comportement du logiciel. Elles ne démontrent pas que Romain a appris. Le prochain test utile est qu’il joue le cours, explique la relation, puis résolve un cas nouveau avec moins d’aide. Le déploiement reste explicitement non abordé dans ce lot.
+
+## Vérifications conservées de la V1
+
+Les paragraphes suivants documentent les contrôles de l’ancien exercice de groupes de ressources, toujours disponible.
+
 ## Contrôles exécutés
 
 Le contrôle TypeScript et la compilation Vite de production passent. Les 56 tests passent : 46 cas du domaine et 10 parcours d’interface avec React Testing Library et jsdom.

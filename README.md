@@ -1,10 +1,29 @@
 # Atelier Cloud
 
-Un poste de travail simulé pour apprendre Azure en réalisant des missions concrètes. Le portail Azure remplit la fenêtre. Pour les autres outils, le moniteur affiche le bureau, les tickets et le carnet. Un seul petit encadré pédagogique reste en bas à droite sur les deux surfaces.
+Un poste de travail simulé pour pratiquer Azure à partir de problèmes applicatifs. Le portail Azure remplit la fenêtre. Les autres outils s’ouvrent dans le moniteur du poste de travail. Un seul encadré de Nora, réductible, accompagne les deux surfaces.
 
-[Lancer le prototype sur Vercel](https://atelier-cloud-ten.vercel.app/)
+[Ouvrir le parcours sur Vercel](https://atelier-cloud-ten.vercel.app/)
 
-La mission 1 est jouable jusqu’à sa résolution : lire DEM-001, préparer le groupe de ressources DEV de DemandesEtude, corriger sa configuration, soumettre le compte rendu et terminer trois mises en situation.
+## Premier mini-parcours V2 : application indisponible
+
+DemandesEtude fonctionne déjà. Nora explique la relation entre groupe de ressources, plan App Service et Web App, puis montre l’effet d’un arrêt et d’un démarrage sur une application d’exemple séparée de l’atelier.
+
+L’apprenant fait une prédiction, reproduit l’expérience sur DemandesEtude et vérifie la réponse et la version côté client. Il traite ensuite une autre application arrêtée, avec des noms et un contexte différents, sans procédure complète. Les personnes qui connaissent déjà la notion peuvent commencer directement par ce cas.
+
+- Le client affiche réellement les conséquences du monde simulé : réponse 200, application arrêtée ou opération en cours. Une page déjà chargée garde son contenu jusqu’à une nouvelle requête.
+- Le portail comprend la recherche globale, les listes de services, groupes et plans, les vues d’ensemble, les propriétés, le Centre de déploiement et l’activité de gestion.
+- Les opérations prennent un court délai, survivent au rechargement et conservent le code déployé.
+- Les explications erronées reçoivent une correction ciblée. Trois indices progressifs et une reprise de l’explication restent disponibles.
+- Le bilan distingue « Réalisé avec aide » et « Démontré en autonomie sur ce cas », selon les observations, l’explication et l’aide reçue. Visiter un écran ou obtenir un bon état ne suffit pas.
+- Le carnet, les preuves terminées et la réduction de l’encadré sont conservés. Rejouer le cours recommence le monde sans effacer le carnet ni les preuves précédentes.
+
+Ce premier lot porte sur l’exécution et le rétablissement d’une application déjà déployée. La création et la publication d’une application restent à construire. Le bilan les indique comme non abordées. Le [contrat pédagogique](docs/refonte-pedagogique.md) décrit la suite et les limites des preuves recueillies.
+
+## Ancien exercice de groupes de ressources
+
+L’exercice DEM-001 reste disponible via **Options du parcours → Reprendre l’ancien exercice**, ou avec [ce lien direct](https://atelier-cloud-ten.vercel.app/?parcours=groupes). Il conserve le ticket, la création et les étiquettes du groupe DEV, les corrections, les annulations, le compte rendu et les trois situations du bilan. Ses validations ne deviennent pas des preuves V2.
+
+Le [scénario V1 détaillé](docs/mission-1.md) reste consultable. Une option de cet exercice permet de revenir au nouveau parcours.
 
 ## Démarrer
 
@@ -23,47 +42,24 @@ npm run build
 npm run preview
 ```
 
-`check` exécute le contrôle TypeScript et les tests. `build` exécute aussi ces vérifications avant de produire `dist/`.
-
-## Parcours disponible
-
-- Portail Azure en plein écran et moniteur du poste de travail en plein écran.
-- Encadré de mission réductible avec ticket, indices, critères, bilan et options ; la réduction est conservée entre outils et après rechargement.
-- Nora, professeure et collègue cloud : introduction en trois répliques, contexte du projet, problème à résoudre et consignes adaptées à l’état réel de la mission.
-- Introduction rejouable dans les options, reprise à la dernière réplique et lecture vocale facultative avec le bouton « Écouter Nora ».
-- « Pourquoi ces étiquettes ? » compare les valeurs du groupe à leur usage : retrouver l’application, classer l’environnement, identifier l’équipe responsable et préparer le suivi budgétaire. Un exemple d’erreur est consultable sans changer le travail.
-- « Corriger / revenir en arrière » nomme les groupes qui bloquent la mission, compare leurs valeurs actuelles et initiales et propose la restauration des groupes préexistants.
-- Historique des 20 dernières créations, modifications d’étiquettes, suppressions et restaurations, avec annulation et rétablissement conservés après rechargement.
-- Bureau avec raccourcis, barre des tâches et fenêtres réductibles et agrandissables pour les autres applications.
-- Tickets : prise en charge, paramètres du projet, groupe joint, relevé de configuration et soumission.
-- Portail : recherche globale, abonnements, accès, filtres, création, étiquettes modifiables, vue d’ensemble, notifications, activité et suppression confirmée des groupes vides de l’essai.
-- Carnet et fiches sur les notions utiles, avec liens Microsoft Learn.
-- Neuf critères calculés depuis l’inventaire courant ; erreurs techniques distinctes des écarts au ticket.
-- Trois niveaux d’indices et bilan de compréhension dans le même encadré, avec correction et nouvel essai.
-- Variante SuiviInterventions, isolée de la mission principale.
-
-Le [scénario détaillé de la mission 1](docs/mission-1.md) décrit le ticket, les actions et les critères.
+`check` exécute TypeScript et les tests. `build` ajoute la compilation Vite de production. Les [vérifications](docs/verification.md) distinguent tests logiciels, parcours dans le navigateur et test d’apprentissage à effectuer avec Romain.
 
 ## Sauvegarde et simulation
 
-L’état est sauvegardé dans le navigateur sous `atelier-cloud.workspace.v1`. Les brouillons, opérations en cours, ressources, notes, indices, réponses et répliques d’introduction peuvent être retrouvés après rechargement. Les anciennes missions en cours reprennent avec Nora sans imposer le briefing ; il reste rejouable dans les options. La sauvegarde est propre à ce navigateur et à cette adresse ; elle n’est pas synchronisée entre appareils.
+La V2 utilise `atelier-cloud.learning.v2`, distinct de `atelier-cloud.workspace.v1`. Ouvrir la V2 ne modifie pas la sauvegarde V1. Les mondes, essais, niveaux d’aide, preuves, notes et opérations en cours reprennent après rechargement. Une sauvegarde illisible est conservée à part avant d’ouvrir un nouvel atelier.
 
-Tout le domaine Azure est simulé. L’application ne se connecte pas à un abonnement Azure. Les jeux de données sont fictifs ; aucune clé de service ni variable d’environnement n’est nécessaire.
+Les sauvegardes restent propres au navigateur et à l’origine du site ; elles ne sont pas synchronisées entre appareils. Les 30 derniers essais et preuves sont conservés. L’historique technique du monde est borné à 400 événements.
 
-Les polices et icônes sont livrées avec l’application. Seuls les liens documentaires ouverts volontairement quittent le site.
+Tout le domaine Azure et les dépôts du scénario sont fictifs. Aucune commande n’est envoyée à Azure ou GitHub pendant la mission. Aucune clé ni variable d’environnement n’est nécessaire. Les polices et les icônes sont livrées avec l’application.
 
-Les dialogues de Nora sont scénarisés. Ses consignes suivent la configuration courante, sans exécuter les manipulations ni imposer un ordre de clics. La voix utilise la synthèse vocale disponible dans le navigateur, sur demande uniquement ; sa disponibilité et son timbre dépendent de l’appareil. Le texte reste toujours disponible. Aucun service de conversation IA ou vidéo n’est nécessaire à cette version.
-
-Modifier les étiquettes du groupe DEV demandé ne fait pas échouer « Inventaire préservé ». Ce critère signale les groupes initiaux modifiés ou absents et les groupes supplémentaires. Le compte rendu doit être soumis à nouveau si la configuration de son groupe a changé. Les actions du contrôle permettent d’ouvrir directement la correction, le ticket ou le bilan, y compris pour reprendre une ancienne sauvegarde sans historique.
+Les dialogues de Nora sont scénarisés et suivent les observations du monde. Sa voix utilise la synthèse vocale du navigateur, sur demande. Le texte reste disponible ; le timbre et la disponibilité de la voix dépendent de l’appareil. Aucun service de conversation IA ni de vidéo n’est requis.
 
 ## Organisation du code
 
-`src/domain/` contient le scénario, les règles, le réducteur d’état et la validation des sauvegardes. `src/components/` contient les applications du bureau et les dialogues. `WorkspaceContext.tsx` orchestre la sauvegarde et la reprise des créations.
+`src/learning/world.ts` contient le monde V2 et ses opérations. `teaching.ts` extrait les preuves causales ; `reducer.ts` gère les séquences, tentatives et aides. `persistence.ts` valide les sauvegardes. `LearningContext.tsx` orchestre persistance, observations visibles et reprise des opérations. `src/learning/ui/` contient le portail, le poste de travail et l’encadré de Nora.
 
-Les tests du domaine couvrent notamment les droits, les doublons, la casse, les corrections, les comptes rendus périmés et la reprise de progression. Les tests d’interface utilisent React Testing Library et jsdom pour parcourir les composants depuis le ticket jusqu’à la réussite.
+La V1 reste dans `src/domain/`, `src/components/` et `WorkspaceContext.tsx`. `App.tsx` gère le choix des parcours. Les tests couvrent les deux versions, la séparation des sauvegardes et les changements de parcours.
 
 ## GitHub et Vercel
 
-Le dépôt est `morepudding/atelier-cloud`. Le projet Vercel utilise le framework Vite, `npm ci`, la commande `npm run build` et le répertoire de sortie `dist`.
-
-L’intégration Git Vercel relie les mises à jour de la branche `main` au déploiement. Les autres missions du parcours seront ajoutées progressivement.
+Le dépôt est `morepudding/atelier-cloud`. Vercel utilise le framework Vite, `npm ci`, `npm run build` et le répertoire `dist`. Un push sur `main` déclenche automatiquement la publication.

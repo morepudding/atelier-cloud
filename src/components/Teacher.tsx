@@ -4,7 +4,7 @@ import { useWorkspace } from '../WorkspaceContext';
 import { introduction, INTRO_SCENE_COUNT, teacherGuidance } from '../domain/teacher';
 import type { TeacherAction } from '../domain/teacher';
 
-function Narration({ text }: { text: string }) {
+export function Narration({ text }: { text: string }) {
   const [reading, setReading] = useState(false);
   const [failed, setFailed] = useState(false);
   const utterance = useRef<SpeechSynthesisUtterance | null>(null);

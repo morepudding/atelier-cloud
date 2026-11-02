@@ -5,7 +5,7 @@ import { LearningPanelContent } from './Dialogs';
 import { Teacher } from './Teacher';
 import { INTRO_SCENE_COUNT } from '../domain/teacher';
 
-export function MissionPanel() {
+export function MissionPanel({ onNewCourse }: { onNewCourse?: () => void }) {
   const { state, run, assessment, openApp, openPortal, modal, setModal, dispatch, toast, showToast, saveOk, recovered } = useWorkspace();
   const [optionsOpen, setOptionsOpen] = useState(false);
   const ref = useRef<HTMLElement>(null);
@@ -49,6 +49,7 @@ export function MissionPanel() {
     </header>
     {!collapsed && <>
       {optionsOpen && <nav id={menuId} className="mission-panel-options" aria-label="Outils de la mission">
+        {onNewCourse && <button onClick={onNewCourse}><GraduationCap size={15} />Nouveau parcours · Application indisponible</button>}
         <button onClick={() => menuAction(() => dispatch({ type: 'UI', patch: { activeApp: null } }))}><Monitor size={15} />Afficher le bureau</button>
         <button onClick={() => menuAction(() => openPortal(state.ui.portalPage))}><ExternalLink size={15} />Ouvrir le portail Azure</button>
         <button onClick={() => menuAction(() => openApp('notes'))}><BookOpen size={15} />Ouvrir le carnet</button>

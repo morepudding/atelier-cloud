@@ -13,7 +13,11 @@
 ## Progression et validation
 
 - Préserver les anciennes sauvegardes et les parcours existants lors des évolutions de présentation.
-- La validation dépend de l’inventaire courant, du compte rendu et de la compréhension, sans imposer un ordre de clics.
+- La validation V1 dépend de l’inventaire courant, du compte rendu et du bilan. Ne pas la présenter comme une preuve de maîtrise des notions.
+- Pour la refonte V2, suivre docs/refonte-pedagogique.md : séparer le monde simulé, les preuves de l’apprenant et le contrôleur pédagogique. Le premier lot doit enseigner et vérifier un cycle complet sur une application arrêtée avant d’étendre la mission au déploiement.
+- Enseigner une notion avec une explication essentielle et un exemple commenté avant la première mise en application accompagnée. Une aide facultative ne remplace pas cet enseignement.
+- Les compétences revendiquées doivent avoir des preuves identifiables et un niveau d’aide explicite. Une configuration correcte, une visite d’écran ou une répétition du corrigé ne suffisent pas à attribuer une autonomie. Accepter les chemins techniquement valides.
+- Lire un ticket et rédiger un compte rendu restent des éléments de contexte, pas des objectifs pédagogiques pour Romain dans cette première mission.
 - Chaque consigne doit expliquer son but et montrer une conséquence observable. Distinguer les effets d’une étiquette dans les vues de l’équipe fictive des comportements natifs Azure.
 - Nommer les écarts qui bloquent un critère et fournir un chemin de correction. Préserver les annulations, la restauration des groupes initiaux et les anciennes sauvegardes sans historique ; une erreur doit pouvoir se corriger sans recommencer la mission.
 - Tout le domaine Azure est simulé. Conserver uniquement des données fictives.
