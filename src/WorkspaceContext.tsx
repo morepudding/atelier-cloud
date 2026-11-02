@@ -5,7 +5,7 @@ import { SCENARIOS, STORAGE_KEY } from './domain/scenario';
 import type { Scenario } from './domain/scenario';
 import type { Action, AppName, Assessment, PortalPage, RunState, WorkspaceState } from './domain/types';
 
-export type ModalSpec = { kind: 'assessment' | 'hints' | 'reset' | 'success' | 'quiz' } | { kind: 'delete'; groupId: string } | null;
+export type ModalSpec = { kind: 'assessment' | 'hints' | 'reset' | 'success' | 'quiz' | 'recovery' | 'impact' } | { kind: 'delete'; groupId: string } | null;
 interface WorkspaceValue {
   state: WorkspaceState;
   run: RunState;

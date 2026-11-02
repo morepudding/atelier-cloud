@@ -28,6 +28,18 @@ Ensuite, Nora adapte sa consigne aux manipulations : abonnement et droits, nom, 
 
 Le bouton « Écouter Nora » lit la réplique affichée avec la voix du navigateur. Il ne se lance jamais automatiquement et s’arrête au changement de réplique, à l’ouverture d’une autre vue pédagogique, à la réduction du panneau ou lorsque l’onglet est masqué. Le dialogue reste lisible si la voix est indisponible.
 
+# Comprendre ses choix et corriger ses erreurs
+
+Avant de renseigner les étiquettes, Nora explique leur rôle : Application rattache le groupe au projet, Environment aide à retrouver DEV, Owner indique l’équipe à contacter et CostCenter prépare le classement du suivi budgétaire. Dans « Pourquoi ces étiquettes ? », l’apprenant voit les valeurs de son brouillon ou de son groupe et leur effet dans les vues de l’équipe fictive.
+
+« Voir un exemple d’erreur » montre un groupe classé PRD avec un responsable et un centre de coût manquants. Cet exemple ne modifie pas la sauvegarde. La vue explique qu’une étiquette ne change pas l’abonnement ou les droits et que les étiquettes du groupe ne sont pas automatiquement héritées par les futurs services. Le groupe vide n’est pas présenté comme une application déjà hébergée ou une facture de services.
+
+La validation nomme les groupes qui empêchent « Inventaire préservé ». Une modification du nouveau groupe DEV est permise ; en revanche, modifier un groupe initial ou créer un groupe supplémentaire sort du ticket. « Corriger / revenir en arrière » affiche les valeurs actuelles et initiales. La restauration d’un groupe initial conserve le groupe DEV, les réponses, le compte rendu et le carnet. Un groupe supplémentaire s’examine puis se supprime dans le portail, avec la confirmation habituelle.
+
+Les nouvelles opérations sur l’inventaire sont conservées dans un historique de 20 actions par scénario. L’apprenant peut annuler puis rétablir une création, une modification d’étiquettes, une suppression ou une restauration. L’historique reprend après rechargement. Pour une ancienne sauvegarde sans historique, la comparaison avec l’état initial permet encore la restauration des groupes préexistants.
+
+« Compte rendu actualisé » et « Trois situations comprises » sont présentés comme des étapes à terminer. Le contrôle ouvre directement le ticket ou le bilan. Si le groupe est modifié après la réponse, il faut actualiser et soumettre de nouveau son relevé. La correction de l’inventaire n’efface pas les réponses déjà comprises.
+
 # Ticket remis à l’apprenant
 
 **Ticket DEM-001 — Préparer le groupe de ressources DEV de DemandesEtude**

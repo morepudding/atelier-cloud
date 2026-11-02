@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef } from 'react';
 import type { ReactNode } from 'react';
-import { AlertCircle, Check, ChevronRight, Cloud, X } from 'lucide-react';
+import { AlertCircle, Check, ChevronRight, Cloud, GraduationCap, X } from 'lucide-react';
 import type { TagRow } from '../domain/types';
 
 export function AzureLogo({ size = 28 }: { size?: number }) {
@@ -20,6 +20,12 @@ export function Badge({ children, tone = 'neutral' }: { children: ReactNode; ton
 }
 export function Notice({ children, error = false }: { children: ReactNode; error?: boolean }) {
   return <div className={'notice ' + (error ? 'notice-error' : '')} role={error ? 'alert' : 'note'}><AlertCircle size={17} /><div>{children}</div></div>;
+}
+export function TeachingView({ title, children, className = '' }: { title: string; children: ReactNode; className?: string }) {
+  return <section role="region" aria-label={title} className={'teaching-view ' + className} tabIndex={-1} data-learning-view>
+    <p className="teacher-view-signature"><GraduationCap size={15} /><strong>Nora</strong><span>Ta professeure</span></p>
+    <h3 className="teaching-view-title">{title}</h3>{children}
+  </section>;
 }
 export function Breadcrumb({ items, onHome }: { items: string[]; onHome?: () => void }) {
   return <nav className="breadcrumb" aria-label="Fil d’Ariane"><button onClick={onHome}>Accueil</button>{items.map((item, index) => <span key={index}><ChevronRight size={12} />{item}</span>)}</nav>;

@@ -31,6 +31,9 @@ npm run preview
 - Encadré de mission réductible avec ticket, indices, critères, bilan et options ; la réduction est conservée entre outils et après rechargement.
 - Nora, professeure et collègue cloud : introduction en trois répliques, contexte du projet, problème à résoudre et consignes adaptées à l’état réel de la mission.
 - Introduction rejouable dans les options, reprise à la dernière réplique et lecture vocale facultative avec le bouton « Écouter Nora ».
+- « Pourquoi ces étiquettes ? » compare les valeurs du groupe à leur usage : retrouver l’application, classer l’environnement, identifier l’équipe responsable et préparer le suivi budgétaire. Un exemple d’erreur est consultable sans changer le travail.
+- « Corriger / revenir en arrière » nomme les groupes qui bloquent la mission, compare leurs valeurs actuelles et initiales et propose la restauration des groupes préexistants.
+- Historique des 20 dernières créations, modifications d’étiquettes, suppressions et restaurations, avec annulation et rétablissement conservés après rechargement.
 - Bureau avec raccourcis, barre des tâches et fenêtres réductibles et agrandissables pour les autres applications.
 - Tickets : prise en charge, paramètres du projet, groupe joint, relevé de configuration et soumission.
 - Portail : recherche globale, abonnements, accès, filtres, création, étiquettes modifiables, vue d’ensemble, notifications, activité et suppression confirmée des groupes vides de l’essai.
@@ -50,6 +53,8 @@ Tout le domaine Azure est simulé. L’application ne se connecte pas à un abon
 Les polices et icônes sont livrées avec l’application. Seuls les liens documentaires ouverts volontairement quittent le site.
 
 Les dialogues de Nora sont scénarisés. Ses consignes suivent la configuration courante, sans exécuter les manipulations ni imposer un ordre de clics. La voix utilise la synthèse vocale disponible dans le navigateur, sur demande uniquement ; sa disponibilité et son timbre dépendent de l’appareil. Le texte reste toujours disponible. Aucun service de conversation IA ou vidéo n’est nécessaire à cette version.
+
+Modifier les étiquettes du groupe DEV demandé ne fait pas échouer « Inventaire préservé ». Ce critère signale les groupes initiaux modifiés ou absents et les groupes supplémentaires. Le compte rendu doit être soumis à nouveau si la configuration de son groupe a changé. Les actions du contrôle permettent d’ouvrir directement la correction, le ticket ou le bilan, y compris pour reprendre une ancienne sauvegarde sans historique.
 
 ## Organisation du code
 

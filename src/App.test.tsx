@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { App } from './App';
-import { assess, deserialize, initialState } from './domain/engine';
+import { assess, deserialize, initialState, targetGroup, workspaceReducer } from './domain/engine';
 import { DEV_ID, expectedTags, QUIZ, SCENARIOS, STORAGE_KEY, SUBSCRIPTIONS } from './domain/scenario';
 
 beforeEach(() => localStorage.clear());
@@ -41,6 +41,14 @@ async function attachGroup(user: ReturnType<typeof userEvent.setup>) {
 async function usePanelMenu(user: ReturnType<typeof userEvent.setup>, action: string) {
   await user.click(screen.getByRole('button', { name: 'Options de la mission' }));
   await user.click(within(panel()).getByRole('button', { name: action }));
+}
+function recoveryWorkspace() {
+  let state = initialState();
+  state = workspaceReducer(state, { type: 'TEACHER_INTRO', step: 3 });
+  state = workspaceReducer(state, { type: 'TAKE_TICKET', now: 1000 });
+  state = workspaceReducer(state, { type: 'DRAFT', draft: { name: scenario.targetName, subscriptionId: DEV_ID, location: 'francecentral', tags: Object.entries(expectedTags(scenario)).map(([key, value]) => ({ key, value })) } });
+  state = workspaceReducer(state, { type: 'START_CREATE', id: 'target', now: 1000 });
+  return workspaceReducer(state, { type: 'COMPLETE_CREATE', now: 2001 });
 }
 describe('Mission jouable dans un portail ou un moniteur immersif', () => {
   it('termine la mission avec un seul encadré, puis retrouve le résultat après rechargement', async () => {
@@ -232,4 +240,72 @@ describe('Nora présente le contexte et accompagne les manipulations', () => {
     expect(cancel).toHaveBeenCalledTimes(2);
     expect(within(panel()).queryByRole('button', { name: 'Écouter Nora' })).toBeNull();
   });
+});
+
+describe('Comprendre et réparer sans perdre sa progression', () => {
+  it('débloque les trois critères restants d’une ancienne mission, avec groupe initial modifié et groupe en trop', async () => {
+    let state = recoveryWorkspace();
+    state.notes = 'Mes repères conservés';
+    state.run.comment = 'Mon travail en cours';
+    state = workspaceReducer(state, { type: 'SAVE_TAGS', groupId: 'seed-catalogue', rows: [{ key: 'Application', value: scenario.application }], now: 3000 });
+    state = workspaceReducer(state, { type: 'DRAFT', draft: { name: 'rg-erreur-dev', subscriptionId: DEV_ID, location: 'francecentral', tags: [] } });
+    state = workspaceReducer(state, { type: 'START_CREATE', id: 'extra', now: 4000 });
+    state = workspaceReducer(state, { type: 'COMPLETE_CREATE', now: 5001 });
+    const legacy = JSON.parse(JSON.stringify(state));
+    delete legacy.run.inventoryHistory;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(legacy));
+    const user = userEvent.setup();
+    render(<App />);
+    expect(assess(deserialize(localStorage.getItem(STORAGE_KEY)).state.run).passed).toBe(6);
+    await user.click(within(panel()).getByRole('button', { name: 'Vérifier' }));
+    expect(within(panel()).getByText(/Groupe initial modifié : rg-catalogue/)).toBeTruthy();
+    await user.click(within(panel()).getByRole('button', { name: 'Faire le bilan' }));
+    for (const question of QUIZ) await user.click(within(panel()).getByLabelText(question.options[question.correct]));
+    await user.click(within(panel()).getByRole('button', { name: 'Vérifier mes réponses' }));
+    expect(within(panel()).queryByRole('region', { name: 'Mission accomplie' })).toBeNull();
+    await user.click(within(panel()).getByRole('button', { name: 'Revenir à la mission' }));
+    await user.click(within(panel()).getByRole('button', { name: 'Corriger / revenir en arrière' }));
+    expect(within(panel()).getByText('Catalogue', { selector: 'code' })).toBeTruthy();
+    await user.click(within(panel()).getByRole('button', { name: 'Restaurer ce groupe initial' }));
+    let current = deserialize(localStorage.getItem(STORAGE_KEY)).state;
+    expect(targetGroup(current.run)?.name).toBe(scenario.targetName);
+    expect(current.notes).toBe('Mes repères conservés');
+    expect(current.run.comment).toBe('Mon travail en cours');
+    await user.click(within(panel()).getByRole('button', { name: 'Examiner ce groupe' }));
+    await user.click(screen.getByRole('button', { name: 'Supprimer le groupe' }));
+    await user.type(screen.getByLabelText('Recopie le nom exact du groupe'), 'rg-erreur-dev');
+    await user.click(screen.getByRole('button', { name: 'Supprimer le groupe simulé' }));
+    await user.click(within(panel()).getByRole('button', { name: 'Voir le ticket' }));
+    await user.selectOptions(screen.getByLabelText('Groupe à joindre au ticket'), 'target');
+    expect((screen.getByLabelText(/^Ton compte rendu/) as HTMLTextAreaElement).value).toBe('Mon travail en cours');
+    await user.click(screen.getByRole('button', { name: 'Soumettre pour vérification' }));
+    await waitFor(() => expect(within(panel()).getByRole('region', { name: 'Mission accomplie' })).toBeTruthy());
+    current = deserialize(localStorage.getItem(STORAGE_KEY)).state;
+    expect(assess(current.run).complete).toBe(true);
+    expect(current.notes).toBe('Mes repères conservés');
+  }, 15000);
+  it('illustre une erreur d’étiquette sans modifier le travail, puis annule une vraie modification dans le formulaire', async () => {
+    const state = recoveryWorkspace();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(within(panel()).getByRole('button', { name: 'Pourquoi ces étiquettes ?' }));
+    expect(within(panel()).getByText(/Quelle application|Pour quelle application/)).toBeTruthy();
+    await user.click(within(panel()).getByRole('button', { name: 'Voir un exemple d’erreur' }));
+    expect(within(panel()).getByText(/ne sait pas quelle équipe prévenir/)).toBeTruthy();
+    expect(within(panel()).getByText(/Son abonnement reste inchangé/)).toBeTruthy();
+    expect(deserialize(localStorage.getItem(STORAGE_KEY)).state.run.groups).toEqual(state.run.groups);
+    await user.click(within(panel()).getByRole('button', { name: 'Reprendre la mission' }));
+    await user.click(screen.getByRole('tab', { name: 'Étiquettes' }));
+    await user.clear(screen.getByLabelText('Valeur de l’étiquette 3'));
+    await user.type(screen.getByLabelText('Valeur de l’étiquette 3'), 'autre-equipe');
+    await user.click(screen.getByRole('button', { name: 'Enregistrer les étiquettes' }));
+    expect(within(panel()).getByText(/autre-equipe.*comme équipe à prévenir/)).toBeTruthy();
+    await user.click(within(panel()).getByRole('button', { name: 'Corriger / revenir en arrière' }));
+    await user.click(within(panel()).getByRole('button', { name: 'Annuler ma dernière modification' }));
+    await user.click(within(panel()).getByRole('button', { name: 'Reprendre la mission' }));
+    expect((screen.getByLabelText('Valeur de l’étiquette 3') as HTMLInputElement).value).toBe('equipe-webapps');
+    expect(assess(deserialize(localStorage.getItem(STORAGE_KEY)).state.run).technicalReady).toBe(true);
+    expect(screen.getAllByRole('complementary', { name: 'Accompagnement de la mission' })).toHaveLength(1);
+  }, 15000);
 });

@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import type { CSSProperties, ReactNode } from 'react';
-import { ArrowRight, Award, CheckCircle2, GraduationCap, Lightbulb, RotateCcw, Trash2 } from 'lucide-react';
+import type { CSSProperties } from 'react';
+import { ArrowRight, Award, CheckCircle2, Lightbulb, RotateCcw, Trash2 } from 'lucide-react';
 import { useWorkspace } from '../WorkspaceContext';
 import { targetGroup } from '../domain/engine';
 import { HINTS } from '../domain/scenario';
 import type { HintTopic } from '../domain/types';
-import { Badge, CheckDot, Modal, Notice } from './Shared';
+import { Badge, CheckDot, Modal, Notice, TeachingView } from './Shared';
 import { Quiz } from './Ticket';
+import { RecoveryView, TagLearningView } from './LearningTools';
 
 export function Dialogs() {
   const { modal } = useWorkspace();
@@ -20,22 +21,19 @@ export function LearningPanelContent() {
     case 'reset': return <ResetView />;
     case 'success': return <SuccessView />;
     case 'quiz': return <TeachingView title="Bilan de compréhension"><Quiz /></TeachingView>;
+    case 'recovery': return <RecoveryView />;
+    case 'impact': return <TagLearningView />;
     default: return null;
   }
-}
-function TeachingView({ title, children, className = '' }: { title: string; children: ReactNode; className?: string }) {
-  return <section role="region" aria-label={title} className={'teaching-view ' + className} tabIndex={-1} data-learning-view>
-    <p className="teacher-view-signature"><GraduationCap size={15} /><strong>Nora</strong><span>Ta professeure</span></p>
-    <h3 className="teaching-view-title">{title}</h3>{children}
-  </section>;
 }
 function AssessmentView() {
   const { assessment, run, setModal, openPortal, openApp } = useWorkspace();
   const next = assessment.checks.find(c => !c.passed);
-  const resume = () => {
-    if (next?.id === 'knowledge') { setModal({ kind: 'quiz' }); return; }
+  const correct = (id?: string) => {
+    if (id === 'knowledge') { setModal({ kind: 'quiz' }); return; }
+    if (id === 'inventory') { setModal({ kind: 'recovery' }); return; }
     setModal(null);
-    if (next?.id === 'report') openApp('tickets');
+    if (id === 'report') openApp('tickets');
     else { const group = targetGroup(run); openPortal(group ? 'detail' : 'groups', group?.id); }
   };
   return <TeachingView title="Le point sur ta mission" className="assessment-view">
@@ -43,8 +41,8 @@ function AssessmentView() {
       <div className="assessment-ring" style={{ '--progress': assessment.passed / 9 * 100 + '%' } as CSSProperties}><strong>{assessment.passed}<small>/9</small></strong></div>
       <div><Badge tone={assessment.complete ? 'green' : 'blue'}>{assessment.complete ? 'Mission réussie' : 'Mission en cours'}</Badge><p>Le contrôle porte sur l’état actuel de ton environnement.</p></div>
     </div>
-    <ul className="criteria-list">{assessment.checks.map(c => <li key={c.id} className={c.passed ? 'passed' : ''}><CheckDot passed={c.passed} /><div><strong>{c.label}</strong><p>{c.detail}</p></div><span>{c.passed ? 'Validé' : 'À faire'}</span></li>)}</ul>
-    <div className="modal-actions"><button className="button azure-button" onClick={resume}>{next?.id === 'knowledge' ? 'Faire le bilan' : 'Continuer la mission'}<ArrowRight size={15} /></button><button className="text-button" onClick={() => setModal({ kind: 'hints' })}><Lightbulb size={15} />Un indice</button></div>
+    <ul className="criteria-list">{assessment.checks.map(c => <li key={c.id} className={c.passed ? 'passed' : ''}><CheckDot passed={c.passed} /><div><strong>{c.label}</strong><p>{c.detail}</p>{!c.passed && ['inventory', 'report', 'knowledge'].includes(c.id) && <button className="text-button criterion-action" onClick={() => correct(c.id)}>{c.id === 'inventory' ? 'Voir l’écart et le corriger' : c.id === 'report' ? 'Répondre au ticket' : 'Faire le bilan'}<ArrowRight size={12} /></button>}</div><span>{c.passed ? 'Validé' : ['report', 'knowledge'].includes(c.id) ? 'À terminer' : 'À faire'}</span></li>)}</ul>
+    <div className="modal-actions"><button className="button azure-button" onClick={() => correct(next?.id)}>Continuer la mission<ArrowRight size={15} /></button><button className="text-button" onClick={() => setModal({ kind: 'hints' })}><Lightbulb size={15} />Un indice</button></div>
   </TeachingView>;
 }
 function HintsView() {

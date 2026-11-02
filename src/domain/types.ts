@@ -36,9 +36,12 @@ export interface ReportSnapshot {
   tags: Tags;
   resourceCount: number;
 }
+export interface InventoryCheckpoint { groups: ResourceGroup[]; label: string }
+export interface InventoryHistory { past: InventoryCheckpoint[]; future: InventoryCheckpoint[] }
 export interface RunState {
   scenarioKey: ScenarioKey;
   teacherIntroStep: number;
+  inventoryHistory: InventoryHistory;
   groups: ResourceGroup[];
   startedAt: number | null;
   draft: CreateDraft;
@@ -84,6 +87,9 @@ export type Action =
   | { type: 'COMPLETE_CREATE'; now: number }
   | { type: 'SAVE_TAGS'; groupId: string; rows: TagRow[]; now: number }
   | { type: 'DELETE_GROUP'; groupId: string; confirmation: string; now: number }
+  | { type: 'RESTORE_BASELINE'; groupId: string; now: number }
+  | { type: 'UNDO_INVENTORY'; now: number }
+  | { type: 'REDO_INVENTORY'; now: number }
   | { type: 'ATTACH'; groupId: string }
   | { type: 'COMMENT'; text: string }
   | { type: 'SUBMIT_REPORT'; now: number }

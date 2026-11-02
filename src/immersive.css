@@ -275,6 +275,35 @@
 .teacher-view-signature { display: flex; align-items: center; gap: 6px; margin: 1px 0 12px; color: #0067b8; font-size: 12px; }
 .teacher-view-signature > span { color: #6a7179; font-size: 11px; margin-left: 2px; }
 .mission-panel-progress, .mission-panel-actions { flex-shrink: 0; }
+.mission-panel-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin-top: 12px; padding-top: 10px; border-top: 1px solid #e5e9ed; flex-shrink: 0; }
+.mission-panel-tools > .text-button { font-size: 11px; }
+.criterion-action { margin-top: 8px; text-align: left; }
+.inventory-history-controls { margin: 16px 0; display: grid; justify-items: start; gap: 9px; }
+.inventory-history-controls > p.muted { margin-top: 0; overflow-wrap: anywhere; }
+.inventory-history-controls > .button { white-space: normal; text-align: left; }
+.recovery-card { border: 1px solid #d8e1e9; border-radius: 5px; background: #fbfcfe; padding: 13px; margin: 14px 0; }
+.recovery-card h4 { font: 600 13px/1.5 'Segoe UI', sans-serif; margin: 0 0 7px; overflow-wrap: anywhere; color: #273a4c; }
+.recovery-card > p, .recovery-target { color: #596575; font-size: 12px; line-height: 1.6; margin: 7px 0 12px; overflow-wrap: anywhere; }
+.recovery-differences { margin: 12px 0; display: grid; gap: 9px; }
+.recovery-differences > div { display: grid; gap: 3px; border-left: 2px solid #e6b87a; padding-left: 9px; font-size: 12px; line-height: 1.5; color: #596575; }
+.recovery-differences strong { color: #394b5d; }
+.recovery-differences code { overflow-wrap: anywhere; }
+.tag-example-switch { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 10px; }
+.tag-source-label { font-size: 11px; line-height: 1.6; color: #6a7179; overflow-wrap: anywhere; }
+.tag-consequences { display: grid; gap: 12px; margin: 16px 0; }
+.tag-consequences > article { padding: 13px; border: 1px solid #dce3ea; border-left: 3px solid #c38c3c; border-radius: 4px; background: #fffdf9; }
+.tag-consequences > .tag-effect-correct { border-left-color: #4c8757; background: #fafdf9; }
+.tag-consequences article > div { display: flex; align-items: center; flex-wrap: wrap; gap: 5px 10px; }
+.tag-consequences code { font-size: 12px; color: #0067b8; }
+.tag-consequences strong { font-size: 12px; font-weight: 600; color: #394b5d; }
+.tag-consequences p { font-size: 12px; line-height: 1.6; color: #596575; margin: 9px 0; }
+.tag-consequences dl { margin: 10px 0; display: grid; gap: 6px; font-size: 12px; }
+.tag-consequences dl > div { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+.tag-consequences dt { color: #6a7179; }
+.tag-consequences dd { color: #394b5d; margin: 0; overflow-wrap: anywhere; }
+.tag-consequences .tag-effect-output { border-top: 1px solid #e3e7e3; padding-top: 9px; margin-bottom: 0; color: #354b60; }
+.mission-panel .notice { font-size: 12px; line-height: 1.6; }
+.teacher-doc-link { color: #0067b8; font-size: 12px; display: inline-block; margin-top: 12px; }
 
 @media (max-height: 580px) {
   .teacher-intro .teacher-identity { margin-bottom: 8px; }

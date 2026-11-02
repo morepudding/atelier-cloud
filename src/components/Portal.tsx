@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Activity, ArrowLeft, ArrowRight, Bell, Box, CheckCircle2, ChevronRight, CircleHelp, ExternalLink, FolderOpen, Home, Layers3, List, LoaderCircle, LockKeyhole, Menu, Plus, RefreshCw, Search, ShieldCheck, Trash2, X } from 'lucide-react';
 import { useWorkspace } from '../WorkspaceContext';
 import { REGIONS, regionName, SUBSCRIPTIONS, subscriptionName } from '../domain/scenario';
@@ -163,6 +163,9 @@ function GroupDetail() {
   const [tab, setTab] = useState<'overview' | 'tags' | 'resources'>('overview');
   const [rows, setRows] = useState(group && Object.keys(group.tags).length ? Object.entries(group.tags).map(([key, value]) => ({ key, value })) : [{ key: '', value: '' }]);
   const [error, setError] = useState('');
+  useEffect(() => {
+    setRows(group && Object.keys(group.tags).length ? Object.entries(group.tags).map(([key, value]) => ({ key, value })) : [{ key: '', value: '' }]);
+  }, [group?.tags]);
   if (!group) return <div className="portal-page"><Notice>Ce groupe n’est plus dans l’inventaire de cet essai.</Notice><button className="button azure-button" onClick={() => openPortal('groups')}>Revenir à la liste</button></div>;
   const canWrite = writable(group.subscriptionId);
   const save = () => {

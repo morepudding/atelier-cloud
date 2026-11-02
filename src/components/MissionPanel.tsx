@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, BookOpen, Check, ChevronDown, ChevronUp, ExternalLink, Flag, GraduationCap, Lightbulb, Maximize2, Monitor, MoreHorizontal, RotateCcw } from 'lucide-react';
+import { ArrowLeft, BookOpen, Check, ChevronDown, ChevronUp, ExternalLink, Flag, GraduationCap, Lightbulb, Maximize2, Monitor, MoreHorizontal, RotateCcw, Undo2 } from 'lucide-react';
 import { useWorkspace } from '../WorkspaceContext';
 import { LearningPanelContent } from './Dialogs';
 import { Teacher } from './Teacher';
@@ -54,6 +54,8 @@ export function MissionPanel() {
         <button onClick={() => menuAction(() => openApp('notes'))}><BookOpen size={15} />Ouvrir le carnet</button>
         <button onClick={() => menuAction(() => dispatch({ type: 'UI', patch: { activeApp: 'notes', notesTab: 'course' } }))}><BookOpen size={15} />Les notions utiles</button>
         <button onClick={() => menuAction(() => dispatch({ type: 'TEACHER_INTRO', step: 0 }))}><GraduationCap size={15} />Rejouer l’introduction de Nora</button>
+        <button onClick={() => { setOptionsOpen(false); setModal({ kind: 'impact' }); }}><Lightbulb size={15} />Pourquoi ces étiquettes ?</button>
+        <button onClick={() => { setOptionsOpen(false); setModal({ kind: 'recovery' }); }}><Undo2 size={15} />Corriger ou revenir en arrière</button>
         <button onClick={fullScreen}><Maximize2 size={15} />Mode plein écran</button>
         <button onClick={() => { setOptionsOpen(false); setModal({ kind: 'reset' }); }}><RotateCcw size={15} />Recommencer la mission</button>
         {assessment.complete && <button onClick={() => { setOptionsOpen(false); setModal({ kind: 'success' }); }}><Flag size={15} />Revoir ma réussite</button>}
@@ -68,6 +70,7 @@ export function MissionPanel() {
           <button className="button button-outline" onClick={() => setModal({ kind: 'hints' })}><Lightbulb size={16} />Indice</button>
           <button className="button azure-button" onClick={() => setModal({ kind: 'assessment' })}><Check size={16} />Vérifier</button>
         </div>
+        <div className="mission-panel-tools"><button className="text-button" onClick={() => setModal({ kind: 'impact' })}>Pourquoi ces étiquettes ?</button><button className="text-button" onClick={() => setModal({ kind: 'recovery' })}><Undo2 size={13} />Corriger / revenir en arrière</button></div>
         </>}
       </>}
       {toast && <p className="mission-panel-toast" role="status"><Check size={14} />{toast}</p>}

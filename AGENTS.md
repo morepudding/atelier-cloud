@@ -14,6 +14,8 @@
 
 - Préserver les anciennes sauvegardes et les parcours existants lors des évolutions de présentation.
 - La validation dépend de l’inventaire courant, du compte rendu et de la compréhension, sans imposer un ordre de clics.
+- Chaque consigne doit expliquer son but et montrer une conséquence observable. Distinguer les effets d’une étiquette dans les vues de l’équipe fictive des comportements natifs Azure.
+- Nommer les écarts qui bloquent un critère et fournir un chemin de correction. Préserver les annulations, la restauration des groupes initiaux et les anciennes sauvegardes sans historique ; une erreur doit pouvoir se corriger sans recommencer la mission.
 - Tout le domaine Azure est simulé. Conserver uniquement des données fictives.
 - Exécuter les vérifications pertinentes avec npm run build. Cette commande inclut TypeScript, les tests et la compilation Vite.
 - Pour une modification visible, vérifier aussi le rendu et le parcours dans un navigateur réel.
