@@ -17,6 +17,8 @@ Les tests du domaine couvrent aussi les doublons et la casse, les droits sur les
 
 ## Portée des vérifications
 
+Le premier déploiement Vercel a atteint l’état READY depuis le commit 2bdfc8458d007d7ec53b3cf46ce4f8c03164f25d. L’adresse https://atelier-cloud-ten.vercel.app/ répond en HTTP 200. Les fichiers JavaScript et CSS récupérés à cette adresse ont les mêmes empreintes SHA-256 que ceux de la compilation locale vérifiée.
+
 Les tests d’interface manipulent les composants dans un DOM simulé. Ils valident les interactions et les changements d’état. Le rendu graphique, les dimensions des fenêtres et les interactions dans un navigateur réel restent à contrôler visuellement.
 
 La progression est locale au navigateur et à l’origine du site. Il n’y a pas de synchronisation distante ou de connexion à un véritable compte Azure.

@@ -2,6 +2,8 @@
 
 Un poste de travail simulé pour apprendre Azure en réalisant des missions concrètes. Ce premier prototype contient un bureau, une application de tickets, un faux portail Azure et un carnet de notes.
 
+[Lancer le prototype sur Vercel](https://atelier-cloud-ten.vercel.app/)
+
 La mission 1 est jouable jusqu’à sa résolution : lire DEM-001, préparer le groupe de ressources DEV de DemandesEtude, corriger sa configuration, soumettre le compte rendu et terminer trois mises en situation.
 
 ## Démarrer
