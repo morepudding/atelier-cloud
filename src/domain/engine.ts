@@ -4,7 +4,7 @@ import type { Action, Assessment, CreateDraft, ResourceGroup, ReportSnapshot, Ru
 export const blankDraft = (): CreateDraft => ({ subscriptionId: '', name: '', location: '', tags: [{ key: '', value: '' }] });
 export function newRun(scenarioKey: ScenarioKey = 'demandesetude'): RunState {
   return {
-    scenarioKey, groups: baselineGroups(), startedAt: null, draft: blankDraft(), wizardStep: 0, pending: null,
+    scenarioKey, teacherIntroStep: 0, groups: baselineGroups(), startedAt: null, draft: blankDraft(), wizardStep: 0, pending: null,
     notifications: [], error: null, hints: { subscription: 0, find: 0, tags: 0, region: 0 },
     attachedId: '', comment: '', report: null, reportSubmittedAt: null,
     quiz: { answers: [-1, -1, -1], submitted: false }, completedAt: null,
@@ -101,6 +101,9 @@ export function workspaceReducer(state: WorkspaceState, action: Action): Workspa
         run: state.savedRuns[action.key] ?? newRun(action.key), ui: { ...initialState().ui } };
     }
     case 'TAKE_TICKET': next = { ...run, startedAt: run.startedAt ?? action.now }; break;
+    case 'TEACHER_INTRO':
+      if (!Number.isInteger(action.step)) return state;
+      next = { ...run, teacherIntroStep: Math.max(0, Math.min(3, action.step)) }; break;
     case 'DRAFT': next = { ...run, draft: action.draft, error: null }; break;
     case 'WIZARD_STEP': next = { ...run, wizardStep: Math.max(0, Math.min(2, action.step)), error: null }; break;
     case 'START_CREATE': {
@@ -215,8 +218,18 @@ export function deserialize(raw: string | null): { state: WorkspaceState; recove
       || typeof value.ui.maximized !== 'boolean' || !['notes', 'course'].includes(value.ui.notesTab)) throw new Error('ui');
     if (!Object.keys(value.savedRuns).every(key => key === 'demandesetude' || key === 'suiviinterventions')) throw new Error('saved keys');
     for (const run of Object.values(value.savedRuns)) if (!isRun(run)) throw new Error('saved run');
-    return { state: { ...value, ui: { ...value.ui, missionPanelCollapsed: value.ui.missionPanelCollapsed === true } }, recovered: false };
+    return { state: { ...value, run: restoreTeacher(value.run),
+      savedRuns: Object.fromEntries(Object.entries(value.savedRuns).map(([key, saved]) => [key, restoreTeacher(saved)])),
+      ui: { ...value.ui, missionPanelCollapsed: value.ui.missionPanelCollapsed === true } }, recovered: false };
   } catch { return { state: initialState(), recovered: true }; }
+}
+function restoreTeacher(run: RunState): RunState {
+  if (Number.isInteger(run.teacherIntroStep) && run.teacherIntroStep >= 0 && run.teacherIntroStep <= 3) return run;
+  const inProgress = run.startedAt !== null || run.pending !== null || run.groups.some(g => g.origin === 'session')
+    || Boolean(run.draft.name || run.draft.subscriptionId || run.draft.location || run.draft.tags.some(row => row.key || row.value))
+    || Boolean(run.reportSubmittedAt || run.completedAt || run.attachedId || run.comment)
+    || run.quiz.answers.some(answer => answer >= 0) || Object.values(run.hints).some(level => level > 0);
+  return { ...run, teacherIntroStep: inProgress ? 3 : 0 };
 }
 export function loadWorkspace(): { state: WorkspaceState; recovered: boolean } {
   try { return deserialize(localStorage.getItem(STORAGE_KEY)); }

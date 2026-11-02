@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
-import { ArrowRight, Award, CheckCircle2, Lightbulb, RotateCcw, Trash2 } from 'lucide-react';
+import { ArrowRight, Award, CheckCircle2, GraduationCap, Lightbulb, RotateCcw, Trash2 } from 'lucide-react';
 import { useWorkspace } from '../WorkspaceContext';
 import { targetGroup } from '../domain/engine';
 import { HINTS } from '../domain/scenario';
@@ -25,6 +25,7 @@ export function LearningPanelContent() {
 }
 function TeachingView({ title, children, className = '' }: { title: string; children: ReactNode; className?: string }) {
   return <section role="region" aria-label={title} className={'teaching-view ' + className} tabIndex={-1} data-learning-view>
+    <p className="teacher-view-signature"><GraduationCap size={15} /><strong>Nora</strong><span>Ta professeure</span></p>
     <h3 className="teaching-view-title">{title}</h3>{children}
   </section>;
 }

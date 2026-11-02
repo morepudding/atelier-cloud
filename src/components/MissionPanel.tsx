@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, BookOpen, Check, ChevronDown, ChevronUp, ExternalLink, Flag, Lightbulb, Maximize2, Monitor, MoreHorizontal, RotateCcw } from 'lucide-react';
+import { ArrowLeft, BookOpen, Check, ChevronDown, ChevronUp, ExternalLink, Flag, GraduationCap, Lightbulb, Maximize2, Monitor, MoreHorizontal, RotateCcw } from 'lucide-react';
 import { useWorkspace } from '../WorkspaceContext';
 import { LearningPanelContent } from './Dialogs';
+import { Teacher } from './Teacher';
+import { INTRO_SCENE_COUNT } from '../domain/teacher';
 
 export function MissionPanel() {
   const { state, run, assessment, openApp, openPortal, modal, setModal, dispatch, toast, showToast, saveOk, recovered } = useWorkspace();
@@ -51,19 +53,22 @@ export function MissionPanel() {
         <button onClick={() => menuAction(() => openPortal(state.ui.portalPage))}><ExternalLink size={15} />Ouvrir le portail Azure</button>
         <button onClick={() => menuAction(() => openApp('notes'))}><BookOpen size={15} />Ouvrir le carnet</button>
         <button onClick={() => menuAction(() => dispatch({ type: 'UI', patch: { activeApp: 'notes', notesTab: 'course' } }))}><BookOpen size={15} />Les notions utiles</button>
+        <button onClick={() => menuAction(() => dispatch({ type: 'TEACHER_INTRO', step: 0 }))}><GraduationCap size={15} />Rejouer l’introduction de Nora</button>
         <button onClick={fullScreen}><Maximize2 size={15} />Mode plein écran</button>
         <button onClick={() => { setOptionsOpen(false); setModal({ kind: 'reset' }); }}><RotateCcw size={15} />Recommencer la mission</button>
         {assessment.complete && <button onClick={() => { setOptionsOpen(false); setModal({ kind: 'success' }); }}><Flag size={15} />Revoir ma réussite</button>}
         {run.scenarioKey === 'suiviinterventions' && <button onClick={() => menuAction(() => dispatch({ type: 'SWITCH_SCENARIO', key: 'demandesetude' }))}><ArrowLeft size={15} />Revenir à DemandesEtude</button>}
       </nav>}
       {learningView ? <div className="mission-panel-scroll" key={learningView}><LearningPanelContent /></div> : <>
-        <p className="mission-panel-instruction">{assessment.complete ? 'Mission réussie. Ton environnement est prêt pour la suite.' : 'Crée le groupe de ressources demandé dans le ticket.'}</p>
+        <Teacher />
+        {run.teacherIntroStep >= INTRO_SCENE_COUNT && <>
         <div className="mission-panel-progress"><progress value={assessment.passed} max={9} aria-label="Progression de la mission" /><span>{assessment.passed} / 9 critères</span></div>
         <div className="mission-panel-actions">
           <button className="button button-outline" onClick={() => openApp('tickets')}><ExternalLink size={15} />Voir le ticket</button>
           <button className="button button-outline" onClick={() => setModal({ kind: 'hints' })}><Lightbulb size={16} />Indice</button>
           <button className="button azure-button" onClick={() => setModal({ kind: 'assessment' })}><Check size={16} />Vérifier</button>
         </div>
+        </>}
       </>}
       {toast && <p className="mission-panel-toast" role="status"><Check size={14} />{toast}</p>}
       {(!saveOk || recovered) && <p className="mission-panel-storage" role="alert">{!saveOk ? 'Sauvegarde indisponible : garde cet onglet ouvert pour conserver cet essai.' : 'Une sauvegarde illisible a été remplacée par un nouvel essai.'}</p>}

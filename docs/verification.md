@@ -4,7 +4,7 @@ Vérifications du 2 novembre 2026.
 
 ## Contrôles exécutés
 
-Le contrôle TypeScript et la compilation Vite de production passent. Les 36 tests passent : 31 cas du domaine et 5 parcours d’interface avec React Testing Library et jsdom.
+Le contrôle TypeScript et la compilation Vite de production passent. Les 46 tests passent : 38 cas du domaine et 8 parcours d’interface avec React Testing Library et jsdom.
 
 Les parcours d’interface couvrent :
 
@@ -13,8 +13,10 @@ Les parcours d’interface couvrent :
 - Le refus de création en PRD, la conservation du brouillon entre applications et la prise de notes.
 - Les indices, la réduction de fenêtre et la réinitialisation après confirmation.
 - La présence d’un seul encadré pédagogique, sa réduction entre outils et après rechargement, et la reprise des anciennes sauvegardes.
+- Le briefing en trois répliques de Nora, sa reprise après remontage, son rejeu sans effacer le brouillon et son redémarrage lors d’un nouvel essai.
+- Les consignes qui évoluent du ticket au formulaire, la narration sur demande et son annulation au changement de réplique ou à la réduction de l’encadré.
 
-Les tests du domaine couvrent aussi les doublons et la casse, les droits sur les opérations, la préservation de l’inventaire, la correction de région, le compte rendu obsolète, la reprise d’une création en cours sans doublon, les sauvegardes corrompues et l’isolation de la variante.
+Les tests du domaine couvrent aussi les doublons et la casse, les droits sur les opérations, la préservation de l’inventaire, la correction de région, le compte rendu obsolète, la reprise d’une création en cours sans doublon, les sauvegardes corrompues et l’isolation de la variante. L’accompagnement reconnaît une préparation faite dans un autre ordre, retrouve un groupe masqué par les filtres et revient aux corrections si une mission réussie est modifiée. La migration préserve les anciennes missions et variantes sans imposer le briefing au milieu d’un exercice.
 
 ## Portée des vérifications
 
@@ -24,6 +26,8 @@ Les tests d’interface manipulent les composants dans un DOM simulé. Ils valid
 
 La présentation immersive a également été contrôlée dans un navigateur réel : portail et moniteur couvrant toute la fenêtre, encadré unique, réduction conservée après rechargement, navigation entre outils et mission terminée avec 9 critères validés. Aucun avertissement ni erreur de console n’a été observé.
 
-Le contrôle sur un écran de 390 par 844 pixels confirme l’absence de débordement horizontal, l’occupation de toute la fenêtre par les deux surfaces et la présence d’un seul encadré réductible.
+Le parcours avec Nora a été rejoué dans ce navigateur : commande de lecture sur demande, changement de réplique, reprise du briefing après rechargement, ouverture du ticket, prise en charge, choix PRD puis correction vers DEV, création sans étiquettes, consigne de correction, enregistrement des quatre étiquettes, compte rendu, bilan et réussite à 9/9 retrouvée après rechargement. La vérification de la voix porte sur la commande et son cycle de vie ; elle ne mesure pas la qualité audio ou le timbre fourni par chaque appareil.
+
+Le contrôle sur un écran de 390 par 844 pixels confirme l’absence de débordement horizontal, l’occupation de toute la fenêtre par les deux surfaces et la présence d’un seul encadré réductible. Le briefing de Nora reste dans la fenêtre à 390 par 844 et à 390 par 480 pixels ; sa réduction est conservée après rechargement.
 
 La progression est locale au navigateur et à l’origine du site. Il n’y a pas de synchronisation distante ou de connexion à un véritable compte Azure.

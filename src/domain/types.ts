@@ -38,6 +38,7 @@ export interface ReportSnapshot {
 }
 export interface RunState {
   scenarioKey: ScenarioKey;
+  teacherIntroStep: number;
   groups: ResourceGroup[];
   startedAt: number | null;
   draft: CreateDraft;
@@ -76,6 +77,7 @@ export interface Assessment { checks: Criterion[]; passed: number; complete: boo
 export type Action =
   | { type: 'UI'; patch: Partial<UiState> }
   | { type: 'TAKE_TICKET'; now: number }
+  | { type: 'TEACHER_INTRO'; step: number }
   | { type: 'DRAFT'; draft: CreateDraft }
   | { type: 'WIZARD_STEP'; step: number }
   | { type: 'START_CREATE'; id: string; now: number }

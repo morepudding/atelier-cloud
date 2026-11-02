@@ -29,6 +29,8 @@ npm run preview
 
 - Portail Azure en plein écran et moniteur du poste de travail en plein écran.
 - Encadré de mission réductible avec ticket, indices, critères, bilan et options ; la réduction est conservée entre outils et après rechargement.
+- Nora, professeure et collègue cloud : introduction en trois répliques, contexte du projet, problème à résoudre et consignes adaptées à l’état réel de la mission.
+- Introduction rejouable dans les options, reprise à la dernière réplique et lecture vocale facultative avec le bouton « Écouter Nora ».
 - Bureau avec raccourcis, barre des tâches et fenêtres réductibles et agrandissables pour les autres applications.
 - Tickets : prise en charge, paramètres du projet, groupe joint, relevé de configuration et soumission.
 - Portail : recherche globale, abonnements, accès, filtres, création, étiquettes modifiables, vue d’ensemble, notifications, activité et suppression confirmée des groupes vides de l’essai.
@@ -41,11 +43,13 @@ Le [scénario détaillé de la mission 1](docs/mission-1.md) décrit le ticket, 
 
 ## Sauvegarde et simulation
 
-L’état est sauvegardé dans le navigateur sous `atelier-cloud.workspace.v1`. Les brouillons, opérations en cours, ressources, notes, indices et réponses peuvent être retrouvés après rechargement. La sauvegarde est propre à ce navigateur et à cette adresse ; elle n’est pas synchronisée entre appareils.
+L’état est sauvegardé dans le navigateur sous `atelier-cloud.workspace.v1`. Les brouillons, opérations en cours, ressources, notes, indices, réponses et répliques d’introduction peuvent être retrouvés après rechargement. Les anciennes missions en cours reprennent avec Nora sans imposer le briefing ; il reste rejouable dans les options. La sauvegarde est propre à ce navigateur et à cette adresse ; elle n’est pas synchronisée entre appareils.
 
 Tout le domaine Azure est simulé. L’application ne se connecte pas à un abonnement Azure. Les jeux de données sont fictifs ; aucune clé de service ni variable d’environnement n’est nécessaire.
 
 Les polices et icônes sont livrées avec l’application. Seuls les liens documentaires ouverts volontairement quittent le site.
+
+Les dialogues de Nora sont scénarisés. Ses consignes suivent la configuration courante, sans exécuter les manipulations ni imposer un ordre de clics. La voix utilise la synthèse vocale disponible dans le navigateur, sur demande uniquement ; sa disponibilité et son timbre dépendent de l’appareil. Le texte reste toujours disponible. Aucun service de conversation IA ou vidéo n’est nécessaire à cette version.
 
 ## Organisation du code
 

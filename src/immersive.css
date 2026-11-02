@@ -240,6 +240,48 @@
 .mission-panel-storage { color: #8b632c; }
 .mission-panel :is(button, select, input):focus-visible { outline: 2px solid #0078d4; outline-offset: 2px; }
 
+/* Nora lives in the same compact panel as every other teaching interaction. */
+.mission-panel { display: flex; flex-direction: column; }
+.mission-panel-on-desktop { max-height: calc(100dvh - 100px); }
+.mission-panel-header { flex-shrink: 0; }
+.mission-panel-scroll { min-height: 0; }
+.teacher { margin: 12px 0 16px; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.teacher-identity { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.teacher-avatar { position: relative; display: grid; place-items: center; width: 36px; height: 36px; flex-shrink: 0; background: #e9f3ff; border: 1px solid #c8ddf5; border-radius: 50%; font: 600 18px 'Segoe UI', sans-serif; color: #0067b8; }
+.teacher-avatar > svg { position: absolute; right: -4px; bottom: -2px; box-sizing: content-box; background: #fff; color: #0067b8; padding: 2px; border-radius: 50%; }
+.teacher-identity > div:not(.teacher-audio) { flex: 1; }
+.teacher-identity strong { display: block; font-size: 13px; font-weight: 600; }
+.teacher-identity span:not(.teacher-avatar) { display: block; font-size: 11px; color: #6a7179; margin-top: 2px; }
+.teacher-audio { display: flex; justify-content: flex-end; align-items: center; gap: 5px; max-width: 170px; }
+.teacher-audio > button { color: #0067b8; padding: 6px; border-radius: 4px; }
+.teacher-audio > button:hover, .teacher-audio > button[aria-pressed=true] { background: #eaf3fd; }
+.teacher-identity .teacher-audio > span { font-size: 10px; color: #6a7179; line-height: 1.4; }
+.teacher-scene-label { display: flex; align-items: center; justify-content: space-between; font-size: 10px; font-weight: 600; letter-spacing: .9px; color: #637b91; margin: 17px 0 8px; }
+.teacher-scene-label > span { font-weight: 400; letter-spacing: 0; color: #6a7179; }
+.teacher-dialogue > h3 { margin: 0 0 7px; color: #242424; font: 600 13px/1.5 'Segoe UI', sans-serif; letter-spacing: 0; }
+.teacher-dialogue > p { margin: 0; color: #4b535b; font-size: 13px; line-height: 1.65; }
+.teacher-intro .teacher-dialogue > h3 { font-size: 18px; line-height: 1.45; margin-bottom: 10px; }
+.teacher-scene-actions { display: flex; align-items: center; gap: 9px; margin-top: 21px; }
+.teacher-scene-actions > .icon-button { color: #566b7e; padding: 5px; }
+.teacher-scene-dots { flex: 1; display: flex; align-items: center; gap: 5px; }
+.teacher-scene-dots > span { height: 5px; width: 5px; background: #d7e0e9; border-radius: 50%; }
+.teacher-scene-dots > span.active { width: 16px; border-radius: 3px; background: #0078d4; }
+.mission-panel .teacher-skip { display: block; margin: 13px auto 0; color: #6a7179; font-size: 11px; }
+.teacher-next { margin-top: 11px; }
+.teacher-intro { margin-bottom: 0; }
+.teacher:not(.teacher-intro) .teacher-identity { margin-bottom: 9px; }
+.teacher:not(.teacher-intro) .teacher-avatar { width: 30px; height: 30px; font-size: 16px; }
+.teacher:not(.teacher-intro) .teacher-dialogue > p { font-size: 12px; line-height: 1.6; }
+.teacher-view-signature { display: flex; align-items: center; gap: 6px; margin: 1px 0 12px; color: #0067b8; font-size: 12px; }
+.teacher-view-signature > span { color: #6a7179; font-size: 11px; margin-left: 2px; }
+.mission-panel-progress, .mission-panel-actions { flex-shrink: 0; }
+
+@media (max-height: 580px) {
+  .teacher-intro .teacher-identity { margin-bottom: 8px; }
+  .teacher-scene-label { margin-top: 8px; }
+  .teacher-scene-actions { margin-top: 12px; }
+}
+
 @media (max-width: 1100px) {
   .portal-fullscreen .azure-nav { width: 215px; }
   .portal-fullscreen .azure-nav-collapsed { width: 57px; }
@@ -307,7 +349,7 @@
   .portal-fullscreen .azure-filters { gap: 12px; }
   .portal-fullscreen .subscription-filter { width: 100%; justify-content: space-between; }
   .mission-panel { right: 10px; bottom: 10px; width: calc(100vw - 20px); padding: 11px 12px 12px; max-height: calc(100dvh - 20px); }
-  .mission-panel-on-desktop { bottom: 64px; }
+  .mission-panel-on-desktop { bottom: 64px; max-height: calc(100dvh - 74px); }
   .mission-panel-header > h2 { font-size: 15px; }
   .mission-panel-instruction { font-size: 12px; }
   .mission-panel-actions { gap: 7px; }

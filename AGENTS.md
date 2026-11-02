@@ -7,6 +7,7 @@
 - Pour les autres outils, le moniteur du poste de travail simulé occupe toute la fenêtre : bureau, barre des tâches et fenêtres des applications.
 - Conserver un seul encadré pédagogique sur les deux surfaces. Il est réductible et contient les actions du ticket, les indices, les critères, le bilan et les options de mission.
 - Les vues pédagogiques s’ouvrent dans cet encadré. Les dialogues natifs d’une application, comme la confirmation de suppression d’un groupe Azure, restent possibles.
+- Nora, la professeure du parcours, présente le contexte et le problème dans cet encadré, puis donne la prochaine consigne en fonction de l’état réel. Le briefing reste rejouable et ne doit pas effacer une mission en cours.
 - Adapter les champs et la zone de défilement afin que l’encadré ne bloque pas les actions nécessaires, notamment sur les écrans courts et mobiles.
 
 ## Progression et validation

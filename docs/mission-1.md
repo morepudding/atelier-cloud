@@ -14,6 +14,20 @@ La mission mobilise les notions de ressources, groupes de ressources, abonnement
 
 Le temps se répartit librement entre la prise de connaissance du ticket, environ 3 minutes, la manipulation, environ 12 minutes, la vérification et le compte rendu, environ 5 minutes, puis le bilan, environ 5 minutes.
 
+# L’introduction avec Nora
+
+Nora est une ingénieure cloud fictive et la professeure du parcours. Elle intervient dans l’unique encadré en bas à droite. Son introduction comporte trois répliques que l’apprenant avance à son rythme :
+
+1. Elle se présente et explique que le parcours consiste à préparer, déployer puis exploiter une application comme au travail.
+2. Elle présente DemandesEtude et la nouvelle version attendue par l’équipe. Camille confie la préparation de DEV ; INT et PRD sont déjà utilisés.
+3. Elle pose le problème : le groupe DEV dédié manque. Le premier livrable est ce groupe vide, avec le nom, la région et les étiquettes du ticket. L’hébergement viendra dans une prochaine mission.
+
+« C’est parti · Lire le ticket » ouvre Tickets et affiche la première consigne. « Passer l’introduction » conserve l’outil déjà ouvert. Le briefing est rejouable depuis les options sans effacer le travail. La réplique en cours est sauvegardée séparément pour chaque scénario.
+
+Ensuite, Nora adapte sa consigne aux manipulations : abonnement et droits, nom, région, étiquettes, récapitulatif, création en cours, corrections, préservation de l’inventaire, compte rendu à actualiser et bilan de compréhension. Elle reconnaît aussi une préparation réalisée dans un autre ordre. Les opérations restent à réaliser dans les outils simulés.
+
+Le bouton « Écouter Nora » lit la réplique affichée avec la voix du navigateur. Il ne se lance jamais automatiquement et s’arrête au changement de réplique, à l’ouverture d’une autre vue pédagogique, à la réduction du panneau ou lorsque l’onglet est masqué. Le dialogue reste lisible si la voix est indisponible.
+
 # Ticket remis à l’apprenant
 
 **Ticket DEM-001 — Préparer le groupe de ressources DEV de DemandesEtude**
@@ -49,7 +63,7 @@ Une note jointe explique la convention fictive de l’équipe : `rg` désigne le
 
 # État initial du poste de travail
 
-Le bureau comporte trois applications : **Tickets**, **Navigateur** et **Notes**. Le navigateur ouvre le portail Azure simulé. Le ticket et les notes restent consultables pendant les manipulations. Un bandeau permanent indique « Environnement de formation ».
+Le portail Azure simulé occupe toute la fenêtre au démarrage. Pour les autres outils, le moniteur du poste de travail affiche le bureau, les fenêtres et la barre des tâches. Les trois applications sont **Tickets**, **Microsoft Azure** et **Carnet**. Le ticket et les notes restent consultables pendant les manipulations. Le seul élément pédagogique superposé est l’encadré réductible de Nora, conservé sur les deux surfaces.
 
 L’utilisateur est déjà connecté sous le nom **Romain**, dans l’annuaire fictif **Atelier IT**. Aucun parcours d’inscription n’est nécessaire.
 

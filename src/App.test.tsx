@@ -1,20 +1,25 @@
 // @vitest-environment jsdom
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { App } from './App';
-import { assess, deserialize } from './domain/engine';
+import { assess, deserialize, initialState } from './domain/engine';
 import { DEV_ID, expectedTags, QUIZ, SCENARIOS, STORAGE_KEY, SUBSCRIPTIONS } from './domain/scenario';
 
 beforeEach(() => localStorage.clear());
-afterEach(cleanup);
+afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 const scenario = SCENARIOS.demandesetude;
 const panel = () => screen.getByRole('complementary', { name: 'Accompagnement de la mission' });
 async function openCreate(user: ReturnType<typeof userEvent.setup>) {
+  await skipIntroduction(user);
   await user.click(screen.getByRole('button', { name: 'Voir le ticket' }));
   await user.click(screen.getByRole('button', { name: 'Prendre en charge le ticket' }));
   await user.click(screen.getByRole('button', { name: 'Ouvrir le portail Azure' }));
   await user.click(screen.getByRole('button', { name: /Créer un groupe/ }));
+}
+async function skipIntroduction(user: ReturnType<typeof userEvent.setup>) {
+  const skip = screen.queryByRole('button', { name: 'Passer l’introduction' });
+  if (skip) await user.click(skip);
 }
 async function fillBasics(user: ReturnType<typeof userEvent.setup>, subscription: string = DEV_ID) {
   await user.selectOptions(screen.getByRole('combobox', { name: /^Abonnement/ }), subscription);
@@ -112,6 +117,7 @@ describe('Mission jouable dans un portail ou un moniteur immersif', () => {
   it('garde les indices et les confirmations dans l’encadré, y compris sur le bureau vide', async () => {
     const user = userEvent.setup();
     render(<App />);
+    await skipIntroduction(user);
     await user.click(screen.getByRole('button', { name: 'Indice' }));
     expect(within(panel()).getByRole('region', { name: 'Un petit coup de main' })).toBeTruthy();
     await user.click(within(panel()).getByRole('button', { name: 'Afficher un indice' }));
@@ -133,6 +139,7 @@ describe('Mission jouable dans un portail ou un moniteur immersif', () => {
   it('conserve la réduction de l’encadré entre outils et après rechargement', async () => {
     const user = userEvent.setup();
     const view = render(<App />);
+    await skipIntroduction(user);
     await user.click(screen.getByRole('button', { name: 'Réduire l’encadré de mission' }));
     expect(within(panel()).queryByRole('button', { name: 'Voir le ticket' })).toBeNull();
     await user.click(screen.getByRole('button', { name: 'Consulter les notions Azure' }));
@@ -146,4 +153,83 @@ describe('Mission jouable dans un portail ou un moniteur immersif', () => {
     expect(screen.getByRole('region', { name: 'Portail Azure' })).toBeTruthy();
     expect(screen.getAllByRole('complementary', { name: 'Accompagnement de la mission' })).toHaveLength(1);
   }, 15000);
+});
+
+describe('Nora présente le contexte et accompagne les manipulations', () => {
+  it('reprend la scène en cours après rechargement, puis guide depuis le ticket jusque dans le formulaire', async () => {
+    const user = userEvent.setup();
+    const view = render(<App />);
+    expect(within(panel()).getByRole('region', { name: 'Introduction avec Nora' })).toBeTruthy();
+    expect(within(panel()).getByText(/moi c’est Nora/)).toBeTruthy();
+    expect(screen.queryByRole('dialog')).toBeNull();
+    await user.click(within(panel()).getByRole('button', { name: 'Continuer' }));
+    expect(within(panel()).getByRole('heading', { name: 'DemandesEtude arrive en DEV.' })).toBeTruthy();
+    view.unmount();
+    render(<App />);
+    expect(within(panel()).getByRole('heading', { name: 'DemandesEtude arrive en DEV.' })).toBeTruthy();
+    await user.click(within(panel()).getByRole('button', { name: 'Réplique précédente' }));
+    expect(within(panel()).getByText(/moi c’est Nora/)).toBeTruthy();
+    await user.click(within(panel()).getByRole('button', { name: 'Continuer' }));
+    await user.click(within(panel()).getByRole('button', { name: 'Continuer' }));
+    expect(within(panel()).getByText(/Le groupe de ressources DEV dédié/)).toBeTruthy();
+    await user.click(within(panel()).getByRole('button', { name: 'C’est parti · Lire le ticket' }));
+    expect(screen.getByRole('region', { name: 'Moniteur du poste de travail' })).toBeTruthy();
+    expect(within(panel()).getByRole('heading', { name: 'À toi : découvre la demande.' })).toBeTruthy();
+    await user.click(screen.getByRole('button', { name: 'Prendre en charge le ticket' }));
+    await user.click(within(panel()).getByRole('button', { name: 'Voir les abonnements' }));
+    expect(screen.getByRole('region', { name: 'Portail Azure' })).toBeTruthy();
+    await user.click(within(panel()).getByRole('button', { name: 'Ouvrir la création' }));
+    expect(within(panel()).getByRole('heading', { name: 'Commençons par le bon périmètre.' })).toBeTruthy();
+    await user.selectOptions(screen.getByRole('combobox', { name: /^Abonnement/ }), SUBSCRIPTIONS[2].id);
+    expect(within(panel()).getByText(/Tu es Lecteur ici/)).toBeTruthy();
+    await user.selectOptions(screen.getByRole('combobox', { name: /^Abonnement/ }), DEV_ID);
+    expect(within(panel()).getByRole('heading', { name: 'Donne à ce groupe le nom du ticket.' })).toBeTruthy();
+    expect(deserialize(localStorage.getItem(STORAGE_KEY)).state.run.groups).toHaveLength(3);
+    expect(screen.getAllByRole('complementary', { name: 'Accompagnement de la mission' })).toHaveLength(1);
+  }, 15000);
+  it('rejoue le briefing sans modifier le brouillon ou le carnet, et le réinitialise pour un nouvel essai', async () => {
+    const user = userEvent.setup();
+    const saved = initialState();
+    saved.run.teacherIntroStep = 3;
+    saved.run.startedAt = 1000;
+    saved.run.draft.name = 'mon-brouillon';
+    saved.notes = 'Mes repères';
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+    render(<App />);
+    await usePanelMenu(user, 'Rejouer l’introduction de Nora');
+    expect(within(panel()).getByText(/moi c’est Nora/)).toBeTruthy();
+    await skipIntroduction(user);
+    let current = deserialize(localStorage.getItem(STORAGE_KEY)).state;
+    expect(current.run.draft.name).toBe('mon-brouillon');
+    expect(current.run.startedAt).toBe(1000);
+    expect(current.notes).toBe('Mes repères');
+    await usePanelMenu(user, 'Recommencer la mission');
+    await user.click(within(panel()).getByRole('button', { name: 'Recommencer cet essai' }));
+    current = deserialize(localStorage.getItem(STORAGE_KEY)).state;
+    expect(current.run.teacherIntroStep).toBe(0);
+    expect(current.notes).toBe('Mes repères');
+    expect(within(panel()).getByText(/moi c’est Nora/)).toBeTruthy();
+  });
+  it('ne parle que sur demande et arrête la narration en changeant de réplique ou en réduisant le panneau', async () => {
+    class SpeechRequest { text: string; lang = ''; rate = 1; voice = null; onend = null; onerror = null; constructor(text: string) { this.text = text; } }
+    const speak = vi.fn();
+    const cancel = vi.fn();
+    vi.stubGlobal('SpeechSynthesisUtterance', SpeechRequest);
+    vi.stubGlobal('speechSynthesis', { getVoices: () => [], speak, cancel });
+    const user = userEvent.setup();
+    render(<App />);
+    expect(speak).not.toHaveBeenCalled();
+    await user.click(within(panel()).getByRole('button', { name: 'Écouter Nora' }));
+    expect(speak).toHaveBeenCalledOnce();
+    expect(speak.mock.calls[0][0].lang).toBe('fr-FR');
+    expect(speak.mock.calls[0][0].text).toContain('moi c’est Nora');
+    await user.click(within(panel()).getByRole('button', { name: 'Continuer' }));
+    expect(cancel).toHaveBeenCalledOnce();
+    expect(within(panel()).getByRole('button', { name: 'Écouter Nora' })).toBeTruthy();
+    expect(speak).toHaveBeenCalledOnce();
+    await user.click(within(panel()).getByRole('button', { name: 'Écouter Nora' }));
+    await user.click(within(panel()).getByRole('button', { name: 'Réduire l’encadré de mission' }));
+    expect(cancel).toHaveBeenCalledTimes(2);
+    expect(within(panel()).queryByRole('button', { name: 'Écouter Nora' })).toBeNull();
+  });
 });
