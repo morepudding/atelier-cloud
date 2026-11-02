@@ -13,8 +13,8 @@ export function newRun(scenarioKey: ScenarioKey = 'demandesetude'): RunState {
 export function initialState(): WorkspaceState {
   return {
     version: 1, run: newRun(), savedRuns: {}, notes: '',
-    ui: { activeApp: 'tickets', portalPage: 'home', selectedGroupId: '', selectedSubscriptionId: '',
-      filterSubId: 'all', groupSearch: '', maximized: false, notesTab: 'notes' },
+    ui: { activeApp: 'azure', portalPage: 'home', selectedGroupId: '', selectedSubscriptionId: '',
+      filterSubId: 'all', groupSearch: '', maximized: false, notesTab: 'notes', missionPanelCollapsed: false },
   };
 }
 export const writable = (subscriptionId: string) => SUBSCRIPTIONS.some(s => s.id === subscriptionId && s.writable);
@@ -80,7 +80,7 @@ export function assess(run: RunState): Assessment {
     { id: 'report', label: 'Compte rendu actualisé', passed: Boolean(expected && run.reportSubmittedAt && run.report && same(run.report, snapshot(expected)) && run.attachedId === expected.id),
       detail: 'Joins le bon groupe au ticket et soumets un relevé de sa configuration actuelle.' },
     { id: 'knowledge', label: 'Trois situations comprises', passed: run.quiz.submitted && QUIZ.every((q, i) => run.quiz.answers[i] === q.correct),
-      detail: 'Termine le bilan de compréhension dans Tickets.' },
+      detail: 'Termine le bilan de compréhension dans l’encadré de mission.' },
   ];
   const passed = checks.filter(c => c.passed).length;
   return { checks, passed, complete: passed === checks.length, technicalReady: checks.slice(0, 7).every(c => c.passed) };
@@ -215,7 +215,7 @@ export function deserialize(raw: string | null): { state: WorkspaceState; recove
       || typeof value.ui.maximized !== 'boolean' || !['notes', 'course'].includes(value.ui.notesTab)) throw new Error('ui');
     if (!Object.keys(value.savedRuns).every(key => key === 'demandesetude' || key === 'suiviinterventions')) throw new Error('saved keys');
     for (const run of Object.values(value.savedRuns)) if (!isRun(run)) throw new Error('saved run');
-    return { state: value, recovered: false };
+    return { state: { ...value, ui: { ...value.ui, missionPanelCollapsed: value.ui.missionPanelCollapsed === true } }, recovered: false };
   } catch { return { state: initialState(), recovered: true }; }
 }
 export function loadWorkspace(): { state: WorkspaceState; recovered: boolean } {

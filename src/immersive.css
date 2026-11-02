@@ -1,0 +1,329 @@
+/* The workspace is the screen. Training controls live in one bottom corner. */
+.immersive-app { position: relative; width: 100%; height: 100dvh; overflow: hidden; background: #fff; }
+.immersive-workspace, .portal-fullscreen { width: 100%; height: 100%; min-width: 0; min-height: 0; }
+.portal-fullscreen { background: #fff; }
+
+/* Azure's own chrome and content, without a surrounding application frame. */
+.portal-fullscreen .azure-portal { font-family: 'Segoe UI', Arial, sans-serif; color: #242424; }
+.portal-fullscreen .azure-header { height: 56px; gap: 22px; padding: 0 22px; background: #0067b8; }
+.portal-fullscreen .azure-menu { display: inline-flex; color: #fff; padding: 5px; }
+.portal-fullscreen .azure-menu svg { width: 23px; height: 23px; }
+.portal-fullscreen .azure-wordmark { font-family: 'Segoe UI', Arial, sans-serif; font-size: 20px; font-weight: 600; gap: 0; }
+.portal-fullscreen .azure-wordmark svg { display: none; }
+.portal-fullscreen .azure-global-search { max-width: 780px; height: 34px; margin-inline: auto; background: #dfedfa; border: 1px solid #a8cde9; color: #0067b8; }
+.portal-fullscreen .azure-global-search > input { font-size: 14px; color: #294e70; }
+.portal-fullscreen .azure-global-search > input::placeholder { color: #466883; }
+.portal-fullscreen .azure-header-actions { gap: 15px; margin-left: 0; }
+.portal-fullscreen .azure-header-actions > .icon-button { padding: 6px; color: #fff; }
+.portal-fullscreen .azure-header-actions > .icon-button > svg { width: 21px; height: 21px; }
+.portal-fullscreen .azure-help { display: inline-flex; }
+.portal-fullscreen .azure-user > b { height: 30px; width: 30px; font-size: 14px; background: #c0d7e6; color: #28526f; }
+.portal-fullscreen .azure-user > span { font-size: 13px; }
+.portal-fullscreen .azure-user small { font-size: 10px; }
+.portal-fullscreen .azure-nav { width: 240px; background: #f4f5f7; padding-top: 22px; border-right: 1px solid #d6dce2; transition: width .15s; }
+.portal-fullscreen .azure-nav > button { padding: 14px 21px; font-size: 14px; line-height: 1.4; gap: 13px; color: #242424; border-left-width: 3px; }
+.portal-fullscreen .azure-nav > button > svg { color: #0078d4; width: 20px; height: 20px; }
+.portal-fullscreen .azure-nav > button.active { color: #242424; background: #e0e9f2; border-left-color: #0078d4; }
+.portal-fullscreen .azure-nav > button:hover { background: #e5e9ed; }
+.portal-fullscreen .azure-nav-label { font-size: 11px; font-weight: 600; color: #62676c; letter-spacing: 0; padding: 2px 24px 12px; }
+.portal-fullscreen .azure-nav-foot { padding: 18px; font-size: 11px; color: #66717b; }
+.portal-fullscreen .azure-nav-collapsed { width: 57px; }
+.portal-fullscreen .azure-nav-collapsed > button { padding: 14px 16px; }
+.portal-fullscreen .azure-nav-collapsed > button > span,
+.portal-fullscreen .azure-nav-collapsed .azure-nav-label,
+.portal-fullscreen .azure-nav-collapsed .azure-nav-foot { display: none; }
+.portal-fullscreen .azure-nav-expanded > button > span { display: inline; }
+.portal-fullscreen .azure-nav-expanded .azure-nav-label { display: block; }
+.portal-fullscreen .azure-nav-expanded .azure-nav-foot { display: flex; }
+.portal-fullscreen .azure-content { scroll-padding-bottom: var(--mission-panel-clearance, 190px); }
+.portal-fullscreen .portal-page { padding: 20px 25px calc(var(--mission-panel-clearance, 190px) + 24px); }
+.portal-fullscreen .breadcrumb { font-size: 14px; color: #30445d; gap: 8px; margin-bottom: 22px; }
+.portal-fullscreen .breadcrumb > button { font-size: 14px; color: #0067d5; }
+.portal-fullscreen .breadcrumb > span { gap: 8px; }
+.portal-fullscreen .azure-page-heading { align-items: flex-start; margin-bottom: 24px; gap: 18px; }
+.portal-fullscreen .azure-page-heading h2 { font-family: 'Segoe UI', Arial, sans-serif; font-size: 28px; font-weight: 600; color: #242424; letter-spacing: -.4px; margin-bottom: 5px; }
+.portal-fullscreen .azure-page-heading p { font-size: 14px; color: #666; }
+.portal-fullscreen .azure-heading-icon { color: #0078d4; }
+.portal-fullscreen .azure-content h3 { font-family: 'Segoe UI', Arial, sans-serif; color: #242424; font-size: 18px; font-weight: 600; letter-spacing: 0; }
+.portal-fullscreen .azure-services { max-width: 1050px; margin-top: 35px; }
+.portal-fullscreen .service-cards { gap: 18px; margin-top: 20px; }
+.portal-fullscreen .service-cards > button { border-radius: 2px; padding: 24px; background: #fff; border-color: #dce0e4; box-shadow: 0 1px 3px #00000008; }
+.portal-fullscreen .service-cards > button:hover { border-color: #0078d4; background: #f7fbff; }
+.portal-fullscreen .service-cards strong { font-size: 14px; color: #0078d4; }
+.portal-fullscreen .service-cards small { font-size: 12px; color: #626970; }
+.portal-fullscreen .service-icon { color: #0078d4; }
+.portal-fullscreen .recent-groups { max-width: 1400px; margin-top: 36px; }
+.portal-fullscreen .azure-toolbar { padding-bottom: 14px; gap: 22px; border-bottom-color: #dedede; margin-bottom: 18px; }
+.portal-fullscreen .toolbar-button { font-size: 13px; color: #0067b8; gap: 7px; }
+.portal-fullscreen .toolbar-count, .portal-fullscreen .table-footnote { font-size: 12px; color: #626970; }
+.portal-fullscreen .azure-filters { gap: 15px; max-width: 1050px; margin-bottom: 20px; }
+.portal-fullscreen .search-field { max-width: 440px; border-color: #8a8886; border-radius: 2px; padding: 8px 10px; }
+.portal-fullscreen .search-field > input { font-size: 13px; color: #323130; }
+.portal-fullscreen .subscription-filter { font-size: 12px; color: #555; }
+.portal-fullscreen .subscription-filter select { font-size: 12px; border-color: #a1a5a9; border-radius: 2px; max-width: 210px; }
+.portal-fullscreen .table-scroll { border-color: #e1e1e1; border-radius: 0; }
+.portal-fullscreen .azure-table { min-width: 660px; }
+.portal-fullscreen .azure-table th { padding: 12px 15px; font-size: 13px; background: #fff; color: #505050; font-weight: 600; border-bottom-color: #d0d0d0; }
+.portal-fullscreen .azure-table td { padding: 15px; color: #444; font-size: 13px; }
+.portal-fullscreen .table-link { font-size: 14px; color: #0078d4; }
+.portal-fullscreen .azure-table tr:hover td { background: #f5f9fc; }
+.portal-fullscreen .badge { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; border-radius: 2px; }
+.portal-fullscreen .badge-neutral { color: #505050; background: #f0f0f0; }
+.portal-fullscreen .badge-green { color: #326429; background: #eaf5e6; }
+.portal-fullscreen .button { font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; border-radius: 2px; min-height: 34px; padding: 7px 15px; font-weight: 400; }
+.portal-fullscreen .button:hover { transform: none; }
+.portal-fullscreen .azure-button { color: #fff; background: #0078d4; border-color: #0078d4; }
+.portal-fullscreen .button-outline { color: #323130; border-color: #a19f9d; background: #fff; }
+.portal-fullscreen .text-button { font-size: 13px; color: #0078d4; font-weight: 400; }
+.portal-fullscreen .notice { font-size: 13px; color: #3f576c; border: 1px solid #c7e0f4; background: #f3f9fd; border-radius: 2px; }
+.portal-fullscreen .notice-error { color: #a4262c; border-color: #e9b8b8; background: #fff5f5; }
+.portal-fullscreen .wizard-page { padding-bottom: 0; min-height: 100%; }
+.portal-fullscreen .wizard-tabs { gap: 35px; margin: 5px 0 22px; border-bottom: 0; }
+.portal-fullscreen .wizard-tabs > button { font-size: 16px; color: #323130; padding: 12px 0; border-bottom: 3px solid transparent; }
+.portal-fullscreen .wizard-tabs > button > span { display: none; }
+.portal-fullscreen .wizard-tabs > button.active { color: #242424; font-weight: 600; border-bottom-color: #0078d4; }
+.portal-fullscreen .wizard-form { min-height: 0; }
+.portal-fullscreen .azure-form-description { max-width: 1040px; font-size: 14px; line-height: 1.6; margin-bottom: 30px; color: #323130; }
+.portal-fullscreen .form-section { max-width: 900px; margin-bottom: 32px; }
+.portal-fullscreen .form-section > h3 { margin-bottom: 20px; font-size: 20px; }
+.portal-fullscreen .form-section > p { font-size: 13px; color: #5c5c5c; margin-bottom: 20px; }
+.portal-fullscreen .azure-content .form-field { display: grid; grid-template-columns: 255px minmax(0, 530px); column-gap: 20px; row-gap: 7px; max-width: 805px; align-items: center; margin: 23px 0; font-size: 14px; }
+.portal-fullscreen .azure-content .form-field > span { font-size: 14px; color: #323130; font-weight: 400; }
+.portal-fullscreen .azure-content .form-field > span > b { color: #a4262c; margin-left: 6px; }
+.portal-fullscreen .azure-content .form-field > input,
+.portal-fullscreen .azure-content .form-field > select { font-size: 14px; color: #323130; border: 1px solid #8a8886; min-height: 34px; border-radius: 2px; background: #fff; padding: 5px 10px; }
+.portal-fullscreen .azure-content .form-field > small { grid-column: 2; font-size: 12px; color: #62676b; }
+.portal-fullscreen .wizard-footer { border-top: 1px solid #dedede; background: #fff; margin: auto -25px 0; padding: 16px 25px; bottom: 0; gap: 14px; min-height: 70px; }
+.portal-fullscreen .wizard-footer > .button { font-size: 14px; padding: 7px 15px; min-height: 34px; }
+.portal-fullscreen .wizard-footer > .text-button { font-size: 13px; }
+.portal-fullscreen .validation-ok { color: #315b29; background: #f1f9ec; border-color: #c6e2b8; border-radius: 2px; padding: 15px; max-width: 805px; }
+.portal-fullscreen .validation-ok strong { font-size: 14px; }
+.portal-fullscreen .validation-ok small { color: #56654e; font-size: 12px; }
+.portal-fullscreen .review-properties > div { grid-template-columns: 255px minmax(0, 530px); gap: 20px; font-size: 14px; margin-bottom: 18px; }
+.portal-fullscreen .review-properties dt { color: #62676b; }
+.portal-fullscreen .review-properties dd { color: #323130; }
+.portal-fullscreen .tag-heading { font-size: 13px; color: #323130; }
+.portal-fullscreen .tag-row > input { border-color: #8a8886; border-radius: 2px; font-size: 14px; min-height: 34px; }
+.portal-fullscreen .tag-summary > span { font-size: 12px; border-color: #cbd9e6; border-radius: 2px; }
+.portal-fullscreen .tag-summary b { color: #395b78; background: #f0f6fc; font-weight: 400; }
+.portal-fullscreen .tag-summary > span > span { color: #404c56; }
+.portal-fullscreen .property-grid { max-width: 1050px; background: #fff; border: 0; padding: 10px 0; gap: 25px 70px; }
+.portal-fullscreen .property-grid dt { color: #626970; font-size: 13px; }
+.portal-fullscreen .property-grid dd, .portal-fullscreen .property-grid .text-button { color: #323130; font-size: 14px; }
+.portal-fullscreen .property-grid .text-button { color: #0078d4; }
+.portal-fullscreen .group-title h2 { font-size: 25px; }
+.portal-fullscreen .detail-tabs { gap: 32px; }
+.portal-fullscreen .detail-tabs > button { color: #505050; font-size: 14px; }
+.portal-fullscreen .detail-tabs > button.active { color: #242424; font-weight: 600; }
+.portal-fullscreen .group-created { font-size: 13px; color: #3e7535; }
+.portal-fullscreen .resources-stat { max-width: 1050px; border-color: #dedede; border-radius: 2px; }
+.portal-fullscreen .resources-stat strong { color: #0078d4; }
+.portal-fullscreen .resources-stat > div > span { color: #555; font-size: 13px; }
+.portal-fullscreen .empty-state { border-color: #dedede; border-radius: 0; color: #8a8886; }
+.portal-fullscreen .empty-state > h3 { font-size: 20px; font-weight: 400; }
+.portal-fullscreen .empty-state > p { color: #626970; font-size: 14px; }
+.portal-fullscreen .search-results { border-radius: 2px; padding: 12px; }
+.portal-fullscreen .search-results > button { font-size: 13px; padding: 12px 7px; }
+.portal-fullscreen .search-results-label { font-size: 11px; color: #666; }
+.portal-fullscreen .notification-panel { width: 390px; }
+.portal-fullscreen .panel-title > h3 { color: #242424; font-size: 20px; }
+.portal-fullscreen .notification-item strong { font-size: 14px; color: #333; }
+.portal-fullscreen .notification-item p { font-size: 13px; color: #555; }
+.portal-fullscreen .notification-item small { font-size: 11px; color: #62676b; }
+.portal-fullscreen .activity-list strong { font-size: 14px; color: #323130; }
+.portal-fullscreen .activity-list p { font-size: 13px; color: #626970; }
+.portal-fullscreen .activity-list time { font-size: 12px; color: #626970; }
+
+/* The alternate surface is a monitor with a desktop and native app windows. */
+.native-desktop { width: 100%; height: 100%; min-height: 0; }
+.native-desktop .desktop-shortcuts { flex-direction: column; align-items: center; top: 28px; left: 18px; width: 88px; gap: 22px; }
+.native-desktop .desktop-shortcuts > button { flex-direction: column; width: 88px; padding: 7px 3px; gap: 9px; font-family: 'Segoe UI', sans-serif; font-size: 12px; color: #fff; text-shadow: 0 1px 3px #001e2c; }
+.native-desktop .shortcut-icon { height: 49px; width: 49px; border-radius: 10px; text-shadow: none; }
+.native-desktop .shortcut-icon > svg { width: 31px; height: 31px; }
+.native-desktop .shortcut-icon > b { height: 16px; width: 16px; font-size: 9px; }
+.native-desktop .app-window { inset: 54px 60px 86px 123px; max-width: 1280px; margin-inline: auto; border-radius: 8px; }
+.native-desktop.desktop-maximized .app-window { inset: 0 0 52px; max-width: none; border-radius: 0; border: 0; }
+.native-desktop .window-chrome { height: 40px; padding-left: 14px; background: #f8f9fa; }
+.native-desktop .window-title { font: 12px 'Segoe UI', sans-serif; gap: 9px; color: #3f4b53; }
+.native-desktop .window-controls > button { width: 44px; }
+.native-desktop .desktop-taskbar { height: 52px; justify-content: center; padding: 0 22px; }
+.native-desktop .taskbar-apps { margin: 0; gap: 9px; }
+.native-desktop .taskbar-system { position: absolute; right: 20px; gap: 10px; }
+.native-desktop .taskbar-system > svg { display: block; }
+.native-desktop .taskbar-system > span { font: 11px 'Segoe UI', sans-serif; }
+.native-desktop .taskbar-system small { display: block; font-size: 10px; }
+.native-desktop .ticket-detail { padding: 30px 42px calc(var(--mission-panel-clearance, 190px) + 32px); }
+.native-desktop .ticket-detail > * { max-width: 860px; }
+.native-desktop .ticket-sidebar { flex-basis: 205px; }
+.native-desktop .notes-app .course-cards { padding-bottom: calc(var(--mission-panel-clearance, 190px) + 24px); }
+.native-desktop .notebook-page { padding-bottom: calc(var(--mission-panel-clearance, 190px) + 24px); }
+
+/* The single teaching overlay, matching the approved preview. */
+.mission-panel { position: fixed; z-index: 20; right: 24px; bottom: 24px; width: min(450px, calc(100vw - 32px)); background: #fff; border: 1px solid #006bdb; border-radius: 8px; box-shadow: 0 3px 7px #142d4b20, 0 12px 30px #142d4b0c; padding: 12px 15px 15px; color: #242424; font-family: 'Segoe UI', Arial, sans-serif; max-height: calc(100dvh - 48px); }
+.mission-panel-on-desktop { bottom: 73px; }
+.mission-panel-header { display: flex; align-items: center; gap: 6px; min-height: 25px; }
+.mission-panel-header > h2 { flex: 1; min-width: 0; margin: 0; font: 600 16px/1.4 'Segoe UI', sans-serif; color: #202020; letter-spacing: 0; }
+.mission-panel-header > .icon-button { color: #333; padding: 3px; border-radius: 3px; }
+.mission-panel-header > .icon-button:hover { background: #edf4fc; }
+.mission-panel-header > .mission-options-trigger { color: #747474; }
+.mission-panel-instruction { font-size: 13px; color: #333; line-height: 1.5; margin: 8px 0 12px; }
+.mission-panel-progress { display: flex; align-items: center; gap: 13px; margin: 0 0 16px; }
+.mission-panel-progress progress { flex: 1; min-width: 0; height: 8px; accent-color: #0078d4; background: #e5e5e5; }
+.mission-panel-progress progress::-webkit-progress-bar { background: #e5e5e5; }
+.mission-panel-progress progress::-webkit-progress-value { background: #0078d4; }
+.mission-panel-progress progress::-moz-progress-bar { background: #0078d4; }
+.mission-panel-progress > span { font-size: 12px; color: #626262; white-space: nowrap; }
+.mission-panel-actions { display: flex; align-items: center; gap: 10px; }
+.mission-panel .button { font-family: 'Segoe UI', sans-serif; font-size: 13px; border-radius: 4px; min-height: 35px; padding: 7px 11px; font-weight: 400; }
+.mission-panel .button:hover { transform: none; }
+.mission-panel .button-outline { background: #fff; color: #242424; border-color: #c3c6ca; }
+.mission-panel .button-outline:hover { background: #f5f8fc; }
+.mission-panel .azure-button { background: #006fd6; border-color: #006fd6; color: #fff; }
+.mission-panel .azure-button:hover:not(:disabled) { background: #005cb4; }
+.mission-panel-actions > button { flex: 1; white-space: nowrap; }
+.mission-panel-actions > button:first-child { flex: 1.35; }
+.mission-panel-actions > button > svg { color: #006fd6; }
+.mission-panel-actions > .azure-button > svg { color: #fff; }
+.mission-panel .text-button { font-size: 12px; color: #006dcc; font-weight: 400; }
+.mission-panel-collapsed { width: 302px; padding: 9px 12px; }
+.mission-panel-collapsed .mission-panel-header > h2 { font-size: 14px; }
+.mission-mini-progress { font-size: 12px; color: #666; padding: 0 5px; }
+.mission-panel-options { display: grid; gap: 2px; border-top: 1px solid #e5e9ed; border-bottom: 1px solid #e5e9ed; padding: 7px 0; margin: 10px 0 12px; max-height: 244px; overflow: auto; }
+.mission-panel-options > button { text-align: left; display: flex; align-items: center; gap: 9px; padding: 9px 8px; font-size: 13px; color: #333; border-radius: 3px; }
+.mission-panel-options > button:hover { background: #eef5fc; }
+.mission-panel-options svg { color: #0078d4; }
+.mission-panel-scroll { max-height: min(66dvh, 650px); overflow-y: auto; overscroll-behavior: contain; padding: 5px 6px 4px 1px; margin: 10px -5px 0 0; }
+.teaching-view { outline: none; }
+.teaching-view:focus-visible { outline: 2px solid #70afea; outline-offset: -2px; }
+.teaching-view-title { color: #242424; font: 600 18px/1.5 'Segoe UI', sans-serif; margin: 0 0 12px; }
+.mission-panel .modal-intro, .mission-panel .assessment-summary p { color: #555; font-size: 13px; line-height: 1.6; }
+.mission-panel .assessment-summary { margin: 14px 0; gap: 15px; }
+.mission-panel .assessment-ring { width: 58px; height: 58px; background: conic-gradient(#0078d4 var(--progress), #e6edf3 0); }
+.mission-panel .assessment-ring > strong { width: 48px; height: 48px; background: #fff; font: 600 18px 'Segoe UI', sans-serif; color: #0067b8; }
+.mission-panel .assessment-ring small { font-size: 10px; color: #6a6a6a; }
+.mission-panel .badge { font-family: 'Segoe UI', sans-serif; font-size: 11px; padding: 4px 7px; }
+.mission-panel .criteria-list > li { padding: 10px 0; border-color: #e5e9ed; }
+.mission-panel .criteria-list strong { font-family: 'Segoe UI', sans-serif; font-size: 12px; color: #333; }
+.mission-panel .criteria-list p { font-size: 12px; color: #666; margin-top: 3px; }
+.mission-panel .criteria-list > li > span:last-child { font-size: 10px; color: #737373; }
+.mission-panel .criteria-list > li.passed > span:last-child { color: #34773c; }
+.mission-panel .check-dot { border-color: #bfcbd5; }
+.mission-panel .check-dot.is-passed { background: #3c853d; border-color: #3c853d; }
+.mission-panel .form-field { font-size: 13px; margin: 16px 0; }
+.mission-panel .form-field > span { font-size: 13px; color: #333; }
+.mission-panel input, .mission-panel select { border-color: #aab5be; border-radius: 3px; font-size: 13px; }
+.mission-panel .hint-list { background: #f4f8fc; border-color: #d7e6f4; margin-top: 16px; padding: 10px 13px; }
+.mission-panel .hint-empty { padding: 12px; color: #7da5c9; }
+.mission-panel .hint-empty p { font-size: 12px; color: #626970; }
+.mission-panel .hint-list > div:not(.hint-empty) > p { color: #395e7c; font-size: 13px; }
+.mission-panel .hint-list > div > span { color: #0067b8; background: #e2eef9; }
+.mission-panel .modal-actions { gap: 9px; margin-top: 17px; }
+.mission-panel .muted { font-size: 11px; color: #727272; line-height: 1.6; margin: 14px 0 0; }
+.mission-panel .quiz-section { border: 0; margin: 0; padding: 0; }
+.mission-panel .quiz-section > .overline { display: none; }
+.mission-panel .quiz-section > h3 { font: 600 15px/1.5 'Segoe UI', sans-serif; color: #333; margin: 0 0 10px; letter-spacing: 0; }
+.mission-panel .quiz-section p, .mission-panel .quiz-question > p { color: #555; font-size: 12px; }
+.mission-panel .quiz-question { margin: 22px 0; }
+.mission-panel .quiz-question legend { font-size: 13px; color: #333; }
+.mission-panel .quiz-question legend > span { color: #0067b8; background: #eff6fc; border-color: #d4e4f3; }
+.mission-panel .quiz-options label { color: #333; background: #fff; border-color: #d6dde3; font-size: 12px; padding: 10px; }
+.mission-panel .quiz-options label.selected { color: #164b75; background: #f1f7fd; border-color: #0078d4; }
+.mission-panel .quiz-options input { accent-color: #0078d4; }
+.mission-panel .quiz-feedback { font-size: 12px; }
+.mission-panel .success-view > p { font-size: 13px; color: #555; line-height: 1.7; margin-top: 14px; }
+.mission-success-icon { display: inline-grid; place-items: center; height: 49px; width: 49px; background: #eff7ff; color: #0078d4; border: 1px solid #d4e6f7; border-radius: 50%; margin: 0 12px 0 0; }
+.mission-panel .success-group { padding: 14px; border-color: #d5e7d0; background: #f6fbf3; justify-content: flex-start; gap: 9px; }
+.mission-panel .success-group strong { font-size: 12px; color: #395f2b; }
+.mission-panel .success-group span { color: #64775b; font-size: 11px; line-height: 1.5; }
+.mission-panel-toast, .mission-panel-storage { font-size: 12px; color: #4f6555; display: flex; align-items: flex-start; gap: 7px; padding-top: 11px; margin: 10px 0 0; border-top: 1px solid #e4e9ed; line-height: 1.5; }
+.mission-panel-toast > svg { margin-top: 2px; }
+.mission-panel-storage { color: #8b632c; }
+.mission-panel :is(button, select, input):focus-visible { outline: 2px solid #0078d4; outline-offset: 2px; }
+
+@media (max-width: 1100px) {
+  .portal-fullscreen .azure-nav { width: 215px; }
+  .portal-fullscreen .azure-nav-collapsed { width: 57px; }
+  .portal-fullscreen .azure-nav > button { font-size: 13px; padding-inline: 16px; gap: 10px; }
+  .portal-fullscreen .azure-header { gap: 16px; padding-inline: 16px; }
+  .portal-fullscreen .azure-wordmark { font-size: 18px; }
+  .portal-fullscreen .azure-user > span { display: none; }
+  .portal-fullscreen .azure-header-actions { gap: 9px; }
+  .portal-fullscreen .azure-content .form-field { grid-template-columns: 195px minmax(0, 1fr); }
+  .portal-fullscreen .review-properties > div { grid-template-columns: 195px minmax(0, 1fr); }
+  .portal-fullscreen .wizard-footer { position: relative; margin-top: 24px; }
+  .portal-fullscreen .wizard-page { padding-bottom: var(--mission-panel-clearance, 190px); }
+  .native-desktop .app-window { inset: 30px 24px 78px 113px; }
+  .native-desktop .ticket-sidebar { flex-basis: 170px; }
+  .native-desktop .ticket-detail { padding-inline: 27px; }
+}
+@media (max-width: 800px) {
+  .portal-fullscreen .azure-header { height: 52px; gap: 10px; padding-inline: 11px; }
+  .portal-fullscreen .azure-wordmark { font-size: 16px; }
+  .portal-fullscreen .azure-global-search { margin: 0; height: 31px; }
+  .portal-fullscreen .azure-global-search > input { font-size: 12px; width: 100px; }
+  .portal-fullscreen .azure-header-actions { gap: 5px; }
+  .portal-fullscreen .azure-nav-expanded { position: absolute; top: 0; bottom: 0; left: 0; z-index: 7; width: 235px; box-shadow: 8px 0 28px #18395626; }
+  .portal-fullscreen .portal-page { padding-inline: 19px; }
+  .portal-fullscreen .azure-page-heading h2 { font-size: 24px; }
+  .portal-fullscreen .wizard-tabs { gap: 25px; }
+  .portal-fullscreen .wizard-tabs > button { font-size: 14px; white-space: normal; text-align: left; }
+  .portal-fullscreen .azure-content .form-field { display: flex; align-items: stretch; gap: 8px; max-width: 570px; margin: 22px 0; }
+  .portal-fullscreen .azure-content .form-field > small { font-size: 12px; }
+  .portal-fullscreen .form-section { max-width: 600px; }
+  .portal-fullscreen .azure-form-description { font-size: 13px; }
+  .portal-fullscreen .form-section > h3 { font-size: 19px; }
+  .portal-fullscreen .wizard-footer { margin-inline: -19px; padding-inline: 19px; }
+  .portal-fullscreen .service-cards { gap: 10px; }
+  .portal-fullscreen .service-cards > button { padding: 18px 13px; }
+  .portal-fullscreen .service-cards small { display: block; }
+  .native-desktop .app-window { inset: 18px 18px 71px; }
+  .native-desktop .ticket-sidebar { display: none; }
+  .mission-panel { right: 16px; bottom: 16px; }
+  .mission-panel-on-desktop { bottom: 68px; }
+}
+@media (max-width: 500px) {
+  .portal-fullscreen .azure-header { gap: 8px; padding-inline: 8px; }
+  .portal-fullscreen .azure-wordmark { font-size: 13px; }
+  .portal-fullscreen .azure-menu svg { width: 20px; height: 20px; }
+  .portal-fullscreen .azure-global-search { flex: 1; min-width: 70px; }
+  .portal-fullscreen .azure-global-search > input { min-width: 20px; width: 45px; font-size: 11px; }
+  .portal-fullscreen .azure-user, .portal-fullscreen .azure-help { display: none; }
+  .portal-fullscreen .azure-header-actions { gap: 0; }
+  .portal-fullscreen .azure-nav-collapsed { width: 43px; }
+  .portal-fullscreen .azure-nav-collapsed > button { padding: 14px 10px; }
+  .portal-fullscreen .portal-page { padding-inline: 14px; }
+  .portal-fullscreen .breadcrumb { font-size: 12px; margin-bottom: 18px; }
+  .portal-fullscreen .breadcrumb > button { font-size: 12px; }
+  .portal-fullscreen .azure-page-heading h2 { font-size: 22px; }
+  .portal-fullscreen .wizard-tabs { gap: 17px; }
+  .portal-fullscreen .wizard-tabs > button { font-size: 12px; }
+  .portal-fullscreen .wizard-footer { margin-inline: -14px; padding: 16px 14px; gap: 9px; }
+  .portal-fullscreen .wizard-footer > .button { font-size: 12px; padding: 8px 11px; }
+  .portal-fullscreen .property-grid { grid-template-columns: 1fr; gap: 20px; }
+  .portal-fullscreen .review-properties > div { grid-template-columns: 1fr; gap: 6px; }
+  .portal-fullscreen .service-cards { grid-template-columns: 1fr; }
+  .portal-fullscreen .service-cards > button { flex-direction: row; align-items: center; }
+  .portal-fullscreen .service-cards small { display: none; }
+  .portal-fullscreen .azure-filters { gap: 12px; }
+  .portal-fullscreen .subscription-filter { width: 100%; justify-content: space-between; }
+  .mission-panel { right: 10px; bottom: 10px; width: calc(100vw - 20px); padding: 11px 12px 12px; max-height: calc(100dvh - 20px); }
+  .mission-panel-on-desktop { bottom: 64px; }
+  .mission-panel-header > h2 { font-size: 15px; }
+  .mission-panel-instruction { font-size: 12px; }
+  .mission-panel-actions { gap: 7px; }
+  .mission-panel-actions > .button { font-size: 12px; gap: 6px; padding: 7px 9px; }
+  .mission-panel-collapsed { width: 285px; padding: 9px 11px; }
+  .mission-panel-scroll { max-height: min(62dvh, 600px); }
+  .native-desktop .app-window { inset: 9px 8px 63px; }
+  .native-desktop .ticket-detail { padding-inline: 20px; }
+  .native-desktop .desktop-shortcuts { top: 17px; left: 10px; }
+  .native-desktop .taskbar-system { right: 10px; }
+  .native-desktop .taskbar-system > svg { display: none; }
+  .native-desktop .taskbar-system small { font-size: 9px; }
+  .native-desktop .taskbar-apps { gap: 7px; margin-right: 26px; }
+}
+@media (min-width: 1101px) and (max-height: 850px) {
+  .portal-fullscreen .wizard-form { padding-right: 474px; }
+  .portal-fullscreen .azure-content .form-field,
+  .portal-fullscreen .review-properties > div { grid-template-columns: minmax(130px, 35%) minmax(140px, 1fr); gap: 7px 16px; }
+}

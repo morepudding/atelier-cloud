@@ -1,8 +1,8 @@
 import { ArrowRight, Check, CheckCircle2, ClipboardCheck, Clock3, Inbox, Mail, Paperclip, Send, ShieldCheck } from 'lucide-react';
 import { useWorkspace } from '../WorkspaceContext';
 import { expectedTags, QUIZ, regionName, subscriptionName } from '../domain/scenario';
-import { snapshot } from '../domain/engine';
-import { Badge, CheckDot, Notice } from './Shared';
+import { snapshot, targetGroup } from '../domain/engine';
+import { Badge, Notice } from './Shared';
 
 export function Ticket() {
   const { run, scenario, assessment, openPortal, dispatch, setModal } = useWorkspace();
@@ -10,7 +10,10 @@ export function Ticket() {
   const attached = run.groups.find(g => g.id === run.attachedId);
   const report = attached ? snapshot(attached) : null;
   const status = assessment.complete ? 'Résolu' : run.reportSubmittedAt ? 'À corriger' : run.startedAt ? 'En cours' : 'À prendre en charge';
-  const submit = () => dispatch({ type: 'SUBMIT_REPORT', now: Date.now() });
+  const submit = () => {
+    dispatch({ type: 'SUBMIT_REPORT', now: Date.now() });
+    setModal({ kind: assessment.technicalReady && attached?.id === targetGroup(run)?.id ? 'quiz' : 'assessment' });
+  };
   return <div className="tickets-app">
     <aside className="ticket-sidebar"><div className="ticket-app-name"><span><Mail size={20} /></span>Tickets</div><div className="ticket-nav-label">MON ESPACE</div><div className="ticket-folder"><Inbox size={17} />Mes missions<span>1</span></div>
       <article className="ticket-preview" aria-label={'Ticket sélectionné ' + scenario.ticket}><div><span className="unread-dot" /><small>{scenario.ticket}</small><time>09:12</time></div><strong>Préparer le groupe DEV</strong><p>{scenario.application}</p><Badge tone={assessment.complete ? 'green' : 'amber'}>{status}</Badge></article>
@@ -35,16 +38,15 @@ export function Ticket() {
         <label className="form-field"><span>Ton compte rendu</span><textarea rows={3} placeholder="Qu’as-tu préparé et à quoi servira ce groupe ?" value={run.comment} onChange={e => dispatch({ type: 'COMMENT', text: e.target.value })} maxLength={4000} /><small>Explique avec tes mots. La formulation de ce commentaire n’est pas notée automatiquement.</small></label>
         <div className="report-actions"><button className="button button-dark" onClick={submit}><Send size={15} />{run.reportSubmittedAt ? 'Actualiser et soumettre à nouveau' : 'Soumettre pour vérification'}</button><button className="text-button" onClick={() => setModal({ kind: 'assessment' })}>Voir les critères<ArrowRight size={14} /></button></div>
         {run.reportSubmittedAt && <div className="submission-result" aria-live="polite"><div className="section-line"><h4>{assessment.technicalReady && assessment.checks[7].passed ? 'Configuration et compte rendu vérifiés' : 'Quelques points sont à corriger'}</h4><Badge tone={assessment.technicalReady ? 'green' : 'amber'}>{assessment.passed} / 9 critères</Badge></div>
-          {assessment.checks.slice(0, 8).filter(c => !c.passed).map(c => <div className="submission-issue" key={c.id}><CheckDot passed={false} /><div><strong>{c.label}</strong><p>{c.detail}</p></div></div>)}
-          {assessment.technicalReady && assessment.checks[7].passed && <p className="positive-text"><CheckCircle2 size={16} />Ton environnement correspond au ticket. Termine le bilan ci-dessous.</p>}
+          {(!assessment.technicalReady || !assessment.checks[7].passed) && <p className="muted small">Le compte rendu est enregistré. Consulte les points à corriger dans l’encadré de mission.</p>}
+          {assessment.technicalReady && assessment.checks[7].passed && <p className="positive-text"><CheckCircle2 size={16} />Ton environnement correspond au ticket. Termine le bilan dans l’encadré de mission.</p>}
         </div>}
       </section>
-      {run.reportSubmittedAt && <Quiz />}
       <div className="ticket-footer"><Clock3 size={13} />Une erreur corrigée fait partie de l’apprentissage.</div>
     </main>
   </div>;
 }
-function Quiz() {
+export function Quiz() {
   const { run, dispatch, assessment } = useWorkspace();
   return <section className="quiz-section" aria-labelledby="quiz-heading"><span className="overline">LE GESTE ET LE SENS</span><h3 id="quiz-heading">Trois situations pour faire le point</h3><p>Prends un instant pour comprendre ce que tu viens de préparer.</p>
     {QUIZ.map((question, index) => <fieldset className="quiz-question" key={question.title}><legend><span>{String(index + 1).padStart(2, '0')}</span>{question.title}</legend><p>{question.question}</p><div className="quiz-options">{question.options.map((option, optionIndex) => <label key={optionIndex} className={run.quiz.answers[index] === optionIndex ? 'selected' : ''}><input type="radio" name={'question-' + index} checked={run.quiz.answers[index] === optionIndex} onChange={() => dispatch({ type: 'ANSWER', question: index, answer: optionIndex })} /><span>{option}</span></label>)}</div>

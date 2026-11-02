@@ -62,6 +62,7 @@ export interface UiState {
   groupSearch: string;
   maximized: boolean;
   notesTab: 'notes' | 'course';
+  missionPanelCollapsed: boolean;
 }
 export interface WorkspaceState {
   version: 1;

@@ -1,6 +1,6 @@
 # Atelier Cloud
 
-Un poste de travail simulé pour apprendre Azure en réalisant des missions concrètes. Ce premier prototype contient un bureau, une application de tickets, un faux portail Azure et un carnet de notes.
+Un poste de travail simulé pour apprendre Azure en réalisant des missions concrètes. Le portail Azure remplit la fenêtre. Pour les autres outils, le moniteur affiche le bureau, les tickets et le carnet. Un seul petit encadré pédagogique reste en bas à droite sur les deux surfaces.
 
 [Lancer le prototype sur Vercel](https://atelier-cloud-ten.vercel.app/)
 
@@ -27,12 +27,14 @@ npm run preview
 
 ## Parcours disponible
 
-- Bureau avec raccourcis, barre des tâches et fenêtres réductibles et agrandissables.
+- Portail Azure en plein écran et moniteur du poste de travail en plein écran.
+- Encadré de mission réductible avec ticket, indices, critères, bilan et options ; la réduction est conservée entre outils et après rechargement.
+- Bureau avec raccourcis, barre des tâches et fenêtres réductibles et agrandissables pour les autres applications.
 - Tickets : prise en charge, paramètres du projet, groupe joint, relevé de configuration et soumission.
 - Portail : recherche globale, abonnements, accès, filtres, création, étiquettes modifiables, vue d’ensemble, notifications, activité et suppression confirmée des groupes vides de l’essai.
 - Carnet et fiches sur les notions utiles, avec liens Microsoft Learn.
 - Neuf critères calculés depuis l’inventaire courant ; erreurs techniques distinctes des écarts au ticket.
-- Trois niveaux d’indices et bilan de compréhension avec correction et nouvel essai.
+- Trois niveaux d’indices et bilan de compréhension dans le même encadré, avec correction et nouvel essai.
 - Variante SuiviInterventions, isolée de la mission principale.
 
 Le [scénario détaillé de la mission 1](docs/mission-1.md) décrit le ticket, les actions et les critères.

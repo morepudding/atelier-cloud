@@ -125,7 +125,7 @@ Tu peux naviguer ailleurs puis retrouver le groupe. Fermer une fiche laisse le g
 
 ## Répondre au ticket
 
-Reviens dans Tickets et renseigne le compte rendu. Un bouton **Joindre le groupe** associe la fiche à DEM-001 et fournit les propriétés réellement présentes dans le portail.
+Depuis l’encadré de mission, sélectionne **Voir le ticket**, puis renseigne le compte rendu dans Tickets. Le champ **Groupe à joindre au ticket** associe la fiche à DEM-001 et fournit les propriétés réellement présentes dans le portail.
 
 Ajoute une phrase sur l’utilité du groupe, puis sélectionne **Soumettre pour vérification**. Le ticket passe à **À corriger** si des exigences manquent, ou à **Résolu** lorsque les critères techniques et le bilan sont validés.
 
@@ -190,7 +190,7 @@ Le commentaire libre sur l’utilité du groupe sert à la discussion pédagogiq
 
 # Bilan de compréhension
 
-Ces trois situations apparaissent après la soumission technique. L’explication et la réponse attendue sont révélées après une première réponse.
+Ces trois situations apparaissent dans l’encadré de mission après la soumission technique. L’explication et la réponse attendue sont révélées après une première réponse.
 
 **Situation 1 — Préparer les services.** « Le groupe existe et il est vide. L’application est-elle déjà hébergée ? »
 

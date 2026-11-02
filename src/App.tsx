@@ -1,7 +1,7 @@
-import { Component, useState } from 'react';
+import { Component } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
 import { WorkspaceProvider } from './WorkspaceContext';
-import { Coach } from './components/Coach';
+import { MissionPanel } from './components/MissionPanel';
 import { Desktop } from './components/Desktop';
 import { Dialogs } from './components/Dialogs';
 import { STORAGE_KEY } from './domain/scenario';
@@ -16,8 +16,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean
   }
 }
 function Workspace() {
-  const [coachOpen, setCoachOpen] = useState(false);
-  return <div className="app-shell"><a className="skip-link" href="#workspace-main">Aller au poste de travail</a><div className={'coach-container ' + (coachOpen ? 'coach-visible' : '')}><Coach onClose={() => setCoachOpen(false)} /></div>{coachOpen && <button className="coach-scrim" aria-label="Fermer le panneau de mission" onClick={() => setCoachOpen(false)} />}<div id="workspace-main" className="workspace-main"><Desktop onOpenCoach={() => setCoachOpen(true)} /></div><Dialogs /></div>;
+  return <div className="immersive-app"><a className="skip-link" href="#workspace-main">Aller au poste de travail</a><div id="workspace-main" className="immersive-workspace"><Desktop /></div><MissionPanel /><Dialogs /></div>;
 }
 export function App() {
   return <ErrorBoundary><WorkspaceProvider><Workspace /></WorkspaceProvider></ErrorBoundary>;

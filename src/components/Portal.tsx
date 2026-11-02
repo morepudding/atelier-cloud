@@ -10,7 +10,7 @@ export function Portal() {
   const { state, run, openPortal, dispatch } = useWorkspace();
   const [query, setQuery] = useState('');
   const [notifications, setNotifications] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(() => window.innerWidth > 800);
   const services: { title: string; page: PortalPage }[] = [
     { title: 'Groupes de ressources', page: 'groups' }, { title: 'Abonnements', page: 'subscriptions' }, { title: 'Créer un groupe de ressources', page: 'create' },
   ];
@@ -22,7 +22,7 @@ export function Portal() {
     { page: 'home' as const, label: 'Accueil', icon: Home },
     { page: 'subscriptions' as const, label: 'Abonnements', icon: ShieldCheck },
     { page: 'groups' as const, label: 'Groupes de ressources', icon: Layers3 },
-    { page: 'activity' as const, label: 'Activité de cet essai', icon: Activity },
+    { page: 'activity' as const, label: 'Journal d’activité', icon: Activity },
   ];
   return <div className="azure-portal">
     <header className="azure-header">
@@ -37,12 +37,21 @@ export function Portal() {
       <div className="azure-header-actions"><button className="icon-button notification-bell" aria-label="Notifications Azure" aria-expanded={notifications} onClick={() => setNotifications(!notifications)}><Bell size={17} />{run.notifications.length > 0 && <span />}</button><button className="icon-button azure-help" aria-label="Consulter les notions Azure" onClick={() => dispatch({ type: 'UI', patch: { activeApp: 'notes', notesTab: 'course' } })}><CircleHelp size={17} /></button><span className="azure-user"><span>Romain<small>Atelier IT</small></span><b>R</b></span></div>
     </header>
     <div className="azure-body">
-      <nav className={'azure-nav ' + (menuOpen ? 'azure-nav-open' : '')} aria-label="Navigation Azure">
+      <nav className={'azure-nav ' + (menuOpen ? 'azure-nav-expanded' : 'azure-nav-collapsed')} aria-label="Navigation Azure">
         <div className="azure-nav-label">FAVORIS</div>
-        {navItems.map(({ page, label, icon: Icon }) => <button key={page} aria-label={label} title={label} className={state.ui.portalPage === page || (page === 'groups' && ['create', 'detail'].includes(state.ui.portalPage)) ? 'active' : ''} onClick={() => { openPortal(page); setMenuOpen(false); if (page === 'subscriptions') dispatch({ type: 'UI', patch: { selectedSubscriptionId: '' } }); }}><Icon size={17} /><span>{label}</span></button>)}
-        <div className="azure-nav-foot"><LockKeyhole size={15} /><span>Portail de formation<br /><small>Atelier IT · Annuaire fictif</small></span></div>
+        {navItems.map(({ page, label, icon: Icon }) => <button key={page} aria-label={label} title={label} className={state.ui.portalPage === page || (page === 'groups' && ['create', 'detail'].includes(state.ui.portalPage)) ? 'active' : ''} onClick={() => { openPortal(page); if (window.innerWidth <= 800) setMenuOpen(false); if (page === 'subscriptions') dispatch({ type: 'UI', patch: { selectedSubscriptionId: '' } }); }}><Icon size={17} /><span>{label}</span></button>)}
+        <div className="azure-nav-foot"><LockKeyhole size={15} /><span>Annuaire : Atelier IT</span></div>
       </nav>
-      <main className="azure-content">
+      <main className="azure-content" onFocusCapture={event => {
+        const target = event.target;
+        const panel = document.querySelector('.mission-panel');
+        if (!(target instanceof HTMLElement) || !panel || !target.matches('input, select, textarea, button')) return;
+        const field = target.getBoundingClientRect();
+        const overlay = panel.getBoundingClientRect();
+        if (field.right > overlay.left && field.left < overlay.right && field.bottom > overlay.top && field.top < overlay.bottom) {
+          event.currentTarget.scrollTop += field.bottom - overlay.top + 20;
+        }
+      }}>
         {run.error && <div className="portal-error"><Notice error>{run.error}</Notice><button className="icon-button" aria-label="Fermer le message d’erreur Azure" onClick={() => dispatch({ type: 'CLEAR_ERROR' })}><X size={16} /></button></div>}
         {state.ui.portalPage === 'home' && <PortalHome />}
         {state.ui.portalPage === 'subscriptions' && <Subscriptions />}
@@ -64,14 +73,13 @@ function PortalHome() {
   const { run, openPortal } = useWorkspace();
   return <div className="portal-page">
     <Breadcrumb items={[]} onHome={() => openPortal('home')} />
-    <div className="azure-page-heading"><div><span className="overline">TON ESPACE AZURE</span><h2>Bienvenue, Romain</h2><p>Les bons outils, au même endroit.</p></div><Badge tone="blue">Atelier IT</Badge></div>
+    <div className="azure-page-heading"><div><h2>Bienvenue, Romain</h2></div></div>
     <section className="azure-services"><h3>Services Azure</h3><div className="service-cards">
       <button onClick={() => openPortal('create')}><span className="service-icon"><Plus size={26} /></span><strong>Créer un groupe</strong><small>Préparer un nouvel espace</small></button>
       <button onClick={() => openPortal('groups')}><span className="service-icon"><Layers3 size={25} /></span><strong>Groupes de ressources</strong><small>{run.groups.length} groupes disponibles</small></button>
       <button onClick={() => openPortal('subscriptions')}><span className="service-icon"><ShieldCheck size={25} /></span><strong>Abonnements</strong><small>3 abonnements · tes accès</small></button>
     </div></section>
     <section className="recent-groups"><h3>Ressources et groupes disponibles</h3><GroupTable groups={run.groups} /></section>
-    <Notice>Tu travailles dans un portail simulé. Les ressources de cet atelier sont fictives et ne créent aucun coût Azure.</Notice>
   </div>;
 }
 function Subscriptions() {
@@ -104,7 +112,7 @@ function Groups() {
 function GroupTable({ groups }: { groups: ResourceGroup[] }) {
   const { openPortal } = useWorkspace();
   return <div className="table-scroll"><table className="azure-table group-table"><thead><tr><th>Nom</th><th>Abonnement</th><th>Région</th><th>Ressources</th></tr></thead><tbody>{groups.map(g => <tr key={g.id}>
-    <td><button className="table-link" onClick={() => openPortal('detail', g.id)}><Layers3 size={17} /><span>{g.name}{g.origin === 'session' && <small>Créé pendant cet essai</small>}</span></button></td><td>{subscriptionName(g.subscriptionId)}</td><td>{regionName(g.location)}</td><td>{g.resources.length}</td>
+    <td><button className="table-link" onClick={() => openPortal('detail', g.id)}><Layers3 size={17} /><span>{g.name}</span></button></td><td>{subscriptionName(g.subscriptionId)}</td><td>{regionName(g.location)}</td><td>{g.resources.length}</td>
   </tr>)}</tbody></table></div>;
 }
 function CreateGroup() {
@@ -123,11 +131,12 @@ function CreateGroup() {
   };
   return <div className="portal-page wizard-page">
     <Breadcrumb items={['Groupes de ressources', 'Créer']} onHome={() => openPortal('home')} />
-    <div className="azure-page-heading"><div><h2>Créer un groupe de ressources</h2><p>Un conteneur logique pour les ressources de ton projet.</p></div><Layers3 size={30} className="azure-heading-icon" /></div>
+    <div className="azure-page-heading"><div><h2>Créer un groupe de ressources</h2></div><button className="icon-button" aria-label="Fermer la création du groupe" onClick={() => openPortal('groups')}><X size={22} /></button></div>
     <div className="wizard-tabs" role="tablist" aria-label="Étapes de création">{['Informations de base', 'Étiquettes', 'Vérifier + créer'].map((label, index) => <button key={label} role="tab" aria-selected={step === index} className={step === index ? 'active' : ''} onClick={() => move(index)} disabled={Boolean(run.pending)}><span>{index + 1}</span>{label}</button>)}</div>
     <div className="wizard-form">
       {errors.length > 0 && <Notice error><ul>{errors.map(e => <li key={e}>{e}</li>)}</ul></Notice>}
       {step === 0 && <>
+        <p className="azure-form-description">Un groupe de ressources est un conteneur qui regroupe les ressources associées d’une solution Azure, telles que des applications web, des comptes de stockage et des bases de données.</p>
         <section className="form-section"><h3>Détails du projet</h3><p>Choisis l’abonnement dans lequel tu souhaites gérer ce groupe.</p>
           <label className="form-field"><span>Abonnement <b>*</b></span><select value={draft.subscriptionId} onChange={e => update({ subscriptionId: e.target.value })}><option value="">Sélectionner un abonnement</option>{SUBSCRIPTIONS.map(s => <option value={s.id} key={s.id}>{s.name}</option>)}</select></label>
           {draft.subscriptionId && !writable(draft.subscriptionId) && <Notice error>Ton rôle Lecteur permet de consulter cet abonnement. La création de ressources y est indisponible.</Notice>}
@@ -136,7 +145,7 @@ function CreateGroup() {
         <section className="form-section"><h3>Détails du groupe</h3><label className="form-field"><span>Région <b>*</b></span><select value={draft.location} onChange={e => update({ location: e.target.value })}><option value="">Sélectionner une région</option>{REGIONS.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}</select><small>Cette région concerne les métadonnées du groupe.</small></label></section>
       </>}
       {step === 1 && <section className="form-section"><h3>Étiquettes</h3><p>Les étiquettes sont des paires nom–valeur pour identifier et organiser tes ressources.</p><TagEditor rows={draft.tags} onChange={tags => update({ tags })} /><Notice>Les étiquettes de ce groupe ne seront pas automatiquement transmises aux futures ressources.</Notice></section>}
-      {step === 2 && <section className="form-section"><div className="validation-ok"><CheckCircle2 size={19} /><div><strong>Validation technique réussie</strong><small>Relis les paramètres et compare-les à ton ticket.</small></div></div><h3>Informations de base</h3><dl className="review-properties"><div><dt>Abonnement</dt><dd>{subscriptionName(draft.subscriptionId)}</dd></div><div><dt>Groupe de ressources</dt><dd>{draft.name}</dd></div><div><dt>Région</dt><dd>{regionName(draft.location)}</dd></div></dl><h3>Étiquettes</h3><TagSummary tags={rowsToTags(draft.tags)} /><p className="muted small">La conformité à la mission sera évaluée depuis l’état du groupe créé.</p></section>}
+      {step === 2 && <section className="form-section"><div className="validation-ok"><CheckCircle2 size={19} /><div><strong>Validation technique réussie</strong><small>Vérifie les paramètres avant de créer le groupe.</small></div></div><h3>Informations de base</h3><dl className="review-properties"><div><dt>Abonnement</dt><dd>{subscriptionName(draft.subscriptionId)}</dd></div><div><dt>Groupe de ressources</dt><dd>{draft.name}</dd></div><div><dt>Région</dt><dd>{regionName(draft.location)}</dd></div></dl><h3>Étiquettes</h3><TagSummary tags={rowsToTags(draft.tags)} /></section>}
     </div>
     <footer className="wizard-footer">{step === 2 ? <button className="button azure-button" disabled={Boolean(run.pending)} onClick={() => dispatch({ type: 'START_CREATE', id: crypto.randomUUID(), now: Date.now() })}>{run.pending ? <><LoaderCircle size={16} className="spin" />Création en cours…</> : <><Plus size={16} />Créer</>}</button> : <button className="button azure-button" onClick={() => move(2)}>Vérifier + créer</button>}
       {step > 0 && <button className="button button-outline" disabled={Boolean(run.pending)} onClick={() => move(step - 1)}><ArrowLeft size={14} />Précédent</button>}
@@ -170,19 +179,18 @@ function GroupDetail() {
       <button className="toolbar-button danger-text" disabled={!canWrite || group.origin !== 'session' || group.resources.length > 0} title="Dans cet exercice, seuls tes groupes vides peuvent être supprimés" onClick={() => setModal({ kind: 'delete', groupId: group.id })}><Trash2 size={15} />Supprimer le groupe</button></div>
     <div className="detail-tabs" role="tablist" aria-label="Informations du groupe">{[{ key: 'overview' as const, label: 'Vue d’ensemble' }, { key: 'tags' as const, label: 'Étiquettes' }, { key: 'resources' as const, label: 'Ressources (' + group.resources.length + ')' }].map(item => <button role="tab" key={item.key} aria-selected={tab === item.key} className={tab === item.key ? 'active' : ''} onClick={() => setTab(item.key)}>{item.label}</button>)}</div>
     {tab === 'overview' && <>
-      {group.origin === 'session' && <div className="group-created"><CheckCircle2 size={17} />Groupe disponible dans ton environnement de formation</div>}
+      {group.origin === 'session' && <div className="group-created"><CheckCircle2 size={17} />Le groupe de ressources a été créé.</div>}
       <dl className="property-grid"><div><dt>Abonnement</dt><dd><button className="text-button" onClick={() => { dispatch({ type: 'UI', patch: { selectedSubscriptionId: group.subscriptionId } }); openPortal('subscriptions'); }}>{subscriptionName(group.subscriptionId)}<ExternalLink size={12} /></button></dd></div><div><dt>Région</dt><dd>{regionName(group.location)}</dd></div><div><dt>Annuaire</dt><dd>Atelier IT</dd></div><div><dt>État</dt><dd><span className="status-dot" />Disponible</dd></div></dl>
       <div className="resources-stat"><span className="resources-stat-icon"><Box size={25} /></span><div><strong>{group.resources.length}</strong><span>ressource{group.resources.length > 1 ? 's' : ''} dans ce groupe</span></div><button className="text-button" onClick={() => setTab('resources')}>Consulter<ArrowRight size={14} /></button></div>
       <div className="section-line"><h3>Étiquettes</h3><button className="text-button" onClick={() => setTab('tags')}>{canWrite ? 'Modifier les étiquettes' : 'Consulter'}</button></div><TagSummary tags={group.tags} />
-      <div className="portal-next-action"><p>Ta configuration correspond au ticket ?</p><button className="button button-outline" onClick={() => { dispatch({ type: 'ATTACH', groupId: group.id }); dispatch({ type: 'UI', patch: { activeApp: 'tickets' } }); }}>Joindre ce groupe au ticket <ArrowRight size={15} /></button></div>
     </>}
-    {tab === 'tags' && <section className="form-section"><h3>Étiquettes du groupe</h3><p>Les modifications s’appliquent à ce groupe.</p>{!canWrite && <Notice>Ce groupe est accessible en lecture seule.</Notice>}{group.origin === 'baseline' && canWrite && <Notice>Ce groupe existait avant la mission. Le ticket demande de conserver sa configuration.</Notice>}{error && <Notice error>{error}</Notice>}<TagEditor rows={rows} onChange={setRows} disabled={!canWrite} />{canWrite && <button className="button azure-button" onClick={save}>Enregistrer les étiquettes</button>}</section>}
-    {tab === 'resources' && (group.resources.length ? <div className="table-scroll"><table className="azure-table"><thead><tr><th>Nom</th><th>Type</th><th>Région</th></tr></thead><tbody>{group.resources.map(r => <tr key={r.name}><td>{r.name}</td><td>{r.type}</td><td>{regionName(r.location)}</td></tr>)}</tbody></table></div> : <div className="empty-state"><FolderOpen size={38} /><h3>Ton groupe est vide</h3><p>Les services de l’application seront ajoutés dans une prochaine mission.</p><Badge tone="green">0 ressource · prêt pour la suite</Badge></div>)}
+    {tab === 'tags' && <section className="form-section"><h3>Étiquettes du groupe</h3><p>Les modifications s’appliquent à ce groupe.</p>{!canWrite && <Notice>Ce groupe est accessible en lecture seule.</Notice>}{error && <Notice error>{error}</Notice>}<TagEditor rows={rows} onChange={setRows} disabled={!canWrite} />{canWrite && <button className="button azure-button" onClick={save}>Enregistrer les étiquettes</button>}</section>}
+    {tab === 'resources' && (group.resources.length ? <div className="table-scroll"><table className="azure-table"><thead><tr><th>Nom</th><th>Type</th><th>Région</th></tr></thead><tbody>{group.resources.map(r => <tr key={r.name}><td>{r.name}</td><td>{r.type}</td><td>{regionName(r.location)}</td></tr>)}</tbody></table></div> : <div className="empty-state"><FolderOpen size={38} /><h3>Aucune ressource à afficher</h3><p>Ce groupe de ressources est vide.</p></div>)}
   </div>;
 }
 function ActivityPage() {
   const { run, openPortal } = useWorkspace();
-  return <div className="portal-page"><Breadcrumb items={['Activité de cet essai']} onHome={() => openPortal('home')} /><div className="azure-page-heading"><div><h2>Activité de cet essai</h2><p>Les opérations réalisées dans ton environnement de formation.</p></div><List size={28} className="azure-heading-icon" /></div>
-    {!run.notifications.length ? <div className="empty-state"><Activity size={35} /><h3>Tout commence ici</h3><p>Tes créations, modifications et suppressions simulées apparaîtront dans ce journal.</p></div> : <div className="activity-list">{run.notifications.map(n => <div key={n.id}><CheckCircle2 size={19} /><span><strong>{n.title}</strong><p>{n.body}</p></span><time>{new Date(n.createdAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</time>{n.groupId && run.groups.some(g => g.id === n.groupId) && <button className="text-button" onClick={() => openPortal('detail', n.groupId)}>Ouvrir<ArrowRight size={13} /></button>}</div>)}</div>}
+  return <div className="portal-page"><Breadcrumb items={['Journal d’activité']} onHome={() => openPortal('home')} /><div className="azure-page-heading"><div><h2>Journal d’activité</h2><p>Historique des opérations sur vos ressources.</p></div><List size={28} className="azure-heading-icon" /></div>
+    {!run.notifications.length ? <div className="empty-state"><Activity size={35} /><h3>Aucun événement à afficher</h3><p>Les opérations sur vos ressources apparaîtront dans ce journal.</p></div> : <div className="activity-list">{run.notifications.map(n => <div key={n.id}><CheckCircle2 size={19} /><span><strong>{n.title}</strong><p>{n.body}</p></span><time>{new Date(n.createdAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</time>{n.groupId && run.groups.some(g => g.id === n.groupId) && <button className="text-button" onClick={() => openPortal('detail', n.groupId)}>Ouvrir<ArrowRight size={13} /></button>}</div>)}</div>}
   </div>;
 }

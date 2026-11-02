@@ -139,6 +139,15 @@ describe('Les règles Azure et le périmètre sont appliqués aux opérations', 
   });
 });
 describe('La progression survit aux interruptions', () => {
+  it('reprend les anciennes sauvegardes sans effacer le parcours lors du changement de présentation', () => {
+    const state = submit(create());
+    const legacy = JSON.parse(JSON.stringify(state));
+    delete legacy.ui.missionPanelCollapsed;
+    const loaded = deserialize(JSON.stringify(legacy));
+    expect(loaded.recovered).toBe(false);
+    expect(loaded.state.run).toEqual(state.run);
+    expect(loaded.state.ui.missionPanelCollapsed).toBe(false);
+  });
   it('ne crée qu’un groupe après double clic et reprise d’une opération', () => {
     let state = workspaceReducer(initialState(), { type: 'DRAFT', draft: correctDraft() });
     state = workspaceReducer(state, { type: 'START_CREATE', id: 'unique', now: 1000 });
