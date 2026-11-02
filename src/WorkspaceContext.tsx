@@ -40,7 +40,14 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   }, [state]);
   useEffect(() => {
     if (!run.pending) return;
-    const timer = window.setTimeout(() => dispatch({ type: 'COMPLETE_CREATE', now: Date.now() }), Math.max(0, run.pending.completeAt - Date.now()));
+    const completeAt = run.pending.completeAt;
+    let timer: number;
+    const complete = () => {
+      const now = Date.now();
+      if (now < completeAt) { timer = window.setTimeout(complete, Math.max(1, completeAt - now)); return; }
+      dispatch({ type: 'COMPLETE_CREATE', now });
+    };
+    timer = window.setTimeout(complete, Math.max(0, completeAt - Date.now()));
     return () => window.clearTimeout(timer);
   }, [run.pending]);
   useEffect(() => {

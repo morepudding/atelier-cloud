@@ -4,7 +4,7 @@ Vérifications du 2 novembre 2026.
 
 ## Mini-parcours V2 — Application indisponible
 
-`npm run build` passe : TypeScript, 79 tests dans six fichiers, puis compilation Vite. Les 56 tests V1 restent verts ; la V2 ajoute 18 tests du monde, du contrôleur et de la sauvegarde, et cinq parcours d’interface.
+`npm run build` passe : TypeScript, 80 tests dans six fichiers, puis compilation Vite. Les 57 tests V1 comprennent un nouveau contrôle du minuteur de création ; la V2 ajoute 18 tests du monde, du contrôleur et de la sauvegarde, et cinq parcours d’interface.
 
 Les nouveaux contrôles vérifient :
 
@@ -19,6 +19,8 @@ Les nouveaux contrôles vérifient :
 Le parcours complet a aussi été joué dans un navigateur réel : explication et schéma, démonstration avec réponses 200 → 403 → 200, correction d’une prédiction, expérience sur DemandesEtude, explication, puis recherche native de SuiviInterventions, inspection du service et du dernier déploiement, démarrage et réponse en version 2.1.0. Le bilan affiche DemandesEtude avec aide et SuiviInterventions en autonomie sur ce cas. Le retour au cours après rechargement conserve les résultats. Un problème de contexte React lors du rechargement à chaud en développement a été corrigé en séparant le contexte de son fournisseur ; la reprise complète fonctionne ensuite.
 
 À 390 × 844 pixels, le moniteur et le portail restent dans la largeur de l’écran, avec un seul encadré. Le contenu de Nora défile ; sa réduction rend la surface de travail accessible et reste conservée après rechargement. Les dimensions normales du navigateur sont rétablies après le contrôle.
+
+Le contrôle de publication a révélé une attente intermittente dans la V1 : si le minuteur se réveillait avant l’échéance, le réducteur refusait de terminer la création et aucun nouveau réveil n’était programmé. Un test avec une horloge décalée d’une milliseconde reproduit le blocage avant correction. Le minuteur vérifie maintenant l’échéance et se réarme si nécessaire. Les nouvelles fiches Azure reviennent aussi en haut à chaque changement de ressource, ce qui a été contrôlé dans le navigateur.
 
 Ces vérifications portent sur le comportement du logiciel. Elles ne démontrent pas que Romain a appris. Le prochain test utile est qu’il joue le cours, explique la relation, puis résolve un cas nouveau avec moins d’aide. Le déploiement reste explicitement non abordé dans ce lot.
 

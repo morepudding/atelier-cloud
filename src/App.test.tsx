@@ -1,13 +1,13 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render, screen, waitFor, within } from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LegacyApp as App } from './App';
 import { assess, deserialize, initialState, targetGroup, workspaceReducer } from './domain/engine';
 import { DEV_ID, expectedTags, QUIZ, SCENARIOS, STORAGE_KEY, SUBSCRIPTIONS } from './domain/scenario';
 
 beforeEach(() => localStorage.clear());
-afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
+afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.useRealTimers(); });
 const scenario = SCENARIOS.demandesetude;
 const panel = () => screen.getByRole('complementary', { name: 'Accompagnement de la mission' });
 async function openCreate(user: ReturnType<typeof userEvent.setup>) {
@@ -51,6 +51,21 @@ function recoveryWorkspace() {
   return workspaceReducer(state, { type: 'COMPLETE_CREATE', now: 2001 });
 }
 describe('Mission jouable dans un portail ou un moniteur immersif', () => {
+  it('termine une création même après un réveil anticipé de son minuteur', async () => {
+    vi.useFakeTimers();
+    const now = Date.now();
+    let state = initialState();
+    state = workspaceReducer(state, { type: 'DRAFT', draft: { name: scenario.targetName, subscriptionId: DEV_ID, location: 'francecentral', tags: Object.entries(expectedTags(scenario)).map(([key, value]) => ({ key, value })) } });
+    state = workspaceReducer(state, { type: 'START_CREATE', id: 'early-timer', now });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    render(<App />);
+    vi.setSystemTime(now - 1);
+    await act(async () => { await vi.advanceTimersByTimeAsync(1000); });
+    expect(deserialize(localStorage.getItem(STORAGE_KEY)).state.run.pending).not.toBeNull();
+    await act(async () => { await vi.advanceTimersByTimeAsync(2); });
+    expect(screen.getByRole('heading', { name: scenario.targetName })).toBeTruthy();
+    expect(deserialize(localStorage.getItem(STORAGE_KEY)).state.run.pending).toBeNull();
+  });
   it('termine la mission avec un seul encadré, puis retrouve le résultat après rechargement', async () => {
     const user = userEvent.setup();
     const view = render(<App />);
